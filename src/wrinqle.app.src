@@ -1,0 +1,14 @@
+{application, wrinqle, [
+	{description, ""},
+	{vsn, "0.1.0"},
+	{modules, []},
+	{registered, [wrinqle_sup]},
+	{applications, [
+		kernel,
+		stdlib,
+		cowboy,
+		lager
+	]},
+	{mod, {wrinqle_app, []}},
+	{env, []}
+]}.
