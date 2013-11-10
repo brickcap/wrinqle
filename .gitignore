@@ -6,4 +6,6 @@ deps
 *.o
 *.beam
 *.plt
+_rel
+ebin
 erl_crash.dump
