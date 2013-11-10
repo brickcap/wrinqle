@@ -1,0 +1,9 @@
+# Created by http://gitignore.io
+
+### Erlang ###
+.eunit
+deps
+*.o
+*.beam
+*.plt
+erl_crash.dump
