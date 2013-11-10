@@ -17,7 +17,16 @@ websocket_init(_TransportName, Req, _Opts) ->
 
 websocket_handle({text, Msg}, Req, State) ->
     lager:info("Got message ~p",[Msg]),
-    {reply, {text, << "That's what she said! ", Msg/binary >>}, Req, State};
+    Parsed = jiffy:decode(Msg),
+    {[{A,B}]}= Parsed,
+    lager:info("The request is:",[Parsed]),
+    case A=:=<<"register">> of
+	true->  {reply, {text, << "That's what she said! ", Msg/binary >>}, Req, State};
+	false-> {reply, {text, << "Sorry try again ", Msg/binary >>}, Req, State}
+	end;
+
+
+   
 
 websocket_handle(_Data, Req, State) ->
 	{ok, Req, State}.
