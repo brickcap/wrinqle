@@ -8,7 +8,7 @@
 -export([websocket_terminate/3]).
 
 init({tcp, http}, _Req, _Opts) ->
-	{upgrade, protocol, cowboy_websocket}.
+    {upgrade, protocol, cowboy_websocket}.
 
 websocket_init(_TransportName, Req, _Opts) ->
     erlang:start_timer(1000, self(), <<"Hello!">>),
