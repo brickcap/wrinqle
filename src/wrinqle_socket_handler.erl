@@ -16,27 +16,29 @@ websocket_init(_TransportName, Req, _Opts) ->
 
 
 websocket_handle({text, Msg}, Req, State) ->
+
     lager:info("Got message ~p",[Msg]),
-    Parsed = jiffy:decode(Msg),
-    {[{A,B}]}= Parsed,
-    lager:info("The request is:",[Parsed]),
-    case A=:=<<"register">> of
-	true->  {reply, {text, << "That's what she said! ", Msg/binary >>}, Req, State};
-	false-> {reply, {text, << "Sorry try again ", Msg/binary >>}, Req, State}
-	end;
 
-
-   
-
+    try  jiffy:decode(Msg) of 
+	{[{A,B}]}-> {reply, {text, jiffy:encode({registered,B})}, Req, State};
+	 _->{reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
+    catch
+	_:_-> {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
+	   
+    end;
 websocket_handle(_Data, Req, State) ->
-	{ok, Req, State}.
+
+    {ok, Req, State}.
+
+
 
 websocket_info({timeout, _Ref, Msg}, Req, State) ->
-	erlang:start_timer(1000, self(), <<"How' you doin'?">>),
-	{reply, {text, Msg}, Req, State};
+    erlang:start_timer(1000, self(), <<"How' you doin'?">>),
+    {reply, {text, Msg}, Req, State};
+
 websocket_info(_Info, Req, State) ->
-	{ok, Req, State}.
+    {ok, Req, State}.
 
 websocket_terminate(_Reason, _Req, _State) ->
-	ok.
+    ok.
 
