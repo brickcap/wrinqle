@@ -20,7 +20,7 @@ websocket_handle({text, Msg}, Req, State) ->
     lager:info("Got message ~p",[Msg]),
 
     try  jiffy:decode(Msg) of 
-	{[{A,B}]}-> {reply, {text, jiffy:encode({registered,B})}, Req, State};
+	{[{A,B}]}-> {reply, {text, jiffy:encode({[{registered,B}]})}, Req, State};
 	 _->{reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
     catch
 	_:_-> {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
