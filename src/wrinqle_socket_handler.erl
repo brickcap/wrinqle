@@ -20,12 +20,20 @@ websocket_handle({text, Msg}, Req, State) ->
     lager:info("Got message ~p",[Msg]),
 
     try  jiffy:decode(Msg) of 
-	{[{A,B}]}-> {reply, {text, jiffy:encode({[{registered,B}]})}, Req, State};
+
+	 {[{<<"to">>,[H|T]},_]}-> {reply,{text,jiffy:encode({[{'delvered-to-multi-channel',[H|T]}]})},Req,State};
+
+	 {[{<<"to">>,Channel},_]}-> {reply,{text,jiffy:encode({[{'delivered-to-single-channel',Channel}]})},Req,State};
+
+	 {[{<<"register">>,B}]}-> {reply, {text, jiffy:encode({[{registered,B}]})}, Req, State};
+
 	 _->{reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
+
     catch
 	_:_-> {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
-	   
+
     end;
+
 websocket_handle(_Data, Req, State) ->
 
     {ok, Req, State}.
