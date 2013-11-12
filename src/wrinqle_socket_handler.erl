@@ -25,7 +25,8 @@ websocket_handle({text, Msg}, Req, State) ->
 	 {[{<<"to">>,Channel},_]}-> 
 	    {reply,{text,jiffy:encode({[{'delivered-to-single-channel',Channel}]})},Req,State};
 
-	 {[{<<"register">>,Name}]}->  {reply, {text, jiffy:encode({[{registered,Name}]})}, Req, State};
+	 {[{<<"register">>,Name}]}-> wrinq_helpers:add_pid(self(),Name), 
+				     {reply, {text, jiffy:encode({[{registered,Name}]})}, Req, State};
 
 	 _->{reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
