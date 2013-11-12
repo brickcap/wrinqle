@@ -12,8 +12,9 @@
 start(_Type, _Args) ->
 	Dispatch = cowboy_router:compile(wrinqle_routes:routes_configuration()),
 	{ok, _} = cowboy:start_http(http, 100, [{port, 3000}],
-		[{env, [{dispatch, Dispatch}]}]),
-	wrinqle_sup:start_link().
+				    [{env, [{dispatch, Dispatch}]}]),
+    pg2:start(),
+    wrinqle_sup:start_link().
 
 stop(_State) ->
 	ok.

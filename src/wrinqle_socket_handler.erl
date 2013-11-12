@@ -11,21 +11,21 @@ init({tcp, http}, _Req, _Opts) ->
     {upgrade, protocol, cowboy_websocket}.
 
 websocket_init(_TransportName, Req, _Opts) ->
-    erlang:start_timer(1000, self(), <<"Hello!">>),
-    {ok, Req, undefined_state}.
+       {ok, Req, undefined_state}.
 
 
 websocket_handle({text, Msg}, Req, State) ->
 
-    lager:info("Got message ~p",[Msg]),
-
+    %%lager:info("Got message ~p",[Msg]),
+    lager:info("pid~p",[self()]),
     try  jiffy:decode(Msg) of 
 
 	 {[{<<"to">>,[H|T]},_]}-> {reply,{text,jiffy:encode({[{'delvered-to-multi-channel',[H|T]}]})},Req,State};
 
-	 {[{<<"to">>,Channel},_]}-> {reply,{text,jiffy:encode({[{'delivered-to-single-channel',Channel}]})},Req,State};
+	 {[{<<"to">>,Channel},_]}-> 
+	    {reply,{text,jiffy:encode({[{'delivered-to-single-channel',Channel}]})},Req,State};
 
-	 {[{<<"register">>,Name}]}-> {reply, {text, jiffy:encode({[{registered,Name}]})}, Req, State};
+	 {[{<<"register">>,Name}]}->  {reply, {text, jiffy:encode({[{registered,Name}]})}, Req, State};
 
 	 _->{reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
@@ -34,10 +34,7 @@ websocket_handle({text, Msg}, Req, State) ->
 
     end;
 
-websocket_handle(_Data, Req, State) ->
-
-    {ok, Req, State}.
-
+websocket_handle(_Data, Req, State) ->  {ok, Req, State}. 
 
 
 websocket_info({timeout, _Ref, Msg}, Req, State) ->
