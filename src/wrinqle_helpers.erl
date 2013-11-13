@@ -7,7 +7,7 @@
 add_pid(Pid,Name)->
 Member = pg2:get_members(Name),
     case Member of
-	[Pid]-> ok;
+	[Pid|_]-> ok;
 	{error,_} ->pg2:create(Name),
 		    pg2:join(Name,Pid)
     end.
@@ -17,7 +17,7 @@ deliver_message(To,Msg) when is_list(To) ->
       fun(N)->
 	      Member = pg2:get_members(N),
 	      case Member of
-		  [Pid] -> Pid ! {send,Msg};
+		  [Pid|_] -> Pid ! {send,Msg};
 		  {error,_}->self()!{error,un_availaible}
 	      end
       end,To);
