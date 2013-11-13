@@ -3,6 +3,7 @@
 -export([add_pid/2]).
 -export([deliver_message/2]).
 -export([subscribe/2]).
+-export([publish/2]).
 
 add_pid(Pid,Name)->
 Member = pg2:get_members(Name),
@@ -42,7 +43,7 @@ subscribe(To,Channels) when  is_list(Channels)->
 subscribe(To,Channel) ->
     Member = pg2:get_members(To),
     case Member of
-	[To|_]->pg2:join(N),
+	[To|_]->pg2:join(Channel),
 		self()!subscribed;
 	{error,_} ->self()!error
     end.
@@ -53,4 +54,4 @@ publish(Channel,Msg)->
 	[Channel|_]->Channel!Msg;
 	{error,_}-> self()!error
     end.
-ok.
+
