@@ -20,10 +20,9 @@ websocket_handle({text, Msg}, Req, State) ->
     lager:info("pid~p",[self()]),
     try  jiffy:decode(Msg) of 
 
-	 {[{<<"to">>,[H|T]},_]}-> {reply,{text,jiffy:encode({[{'delvered-to-multi-channel',[H|T]}]})},Req,State};
+	 {[{<<"to">>,[H|T]},_]}-> wrinq_helpers:deliver_message([H|T],Msg);
 
-	 {[{<<"to">>,Channel},_]}-> 
-	    {reply,{text,jiffy:encode({[{'delivered-to-single-channel',Channel}]})},Req,State};
+	 {[{<<"to">>,Channel},_]}-> wrinq_helpers:deliver_message(Channel,Msg);
 
 	 {[{<<"register">>,Name}]}-> wrinq_helpers:add_pid(self(),Name), 
 				     {reply, {text, jiffy:encode({[{registered,Name}]})}, Req, State};
