@@ -36,10 +36,16 @@ subscribe(To,Channels) when  is_list(Channels)->
     Member = pg2:get_members(To),
     case Member of
 	[To|_]-> lists:foreach(fun(N)->pg2:join(N) end),
-		  self()!subscribed;
+		 self()!subscribed;
 	{error,_}-> self()!error
     end;
-subscribe(To,Channel) ->ok.
+subscribe(To,Channel) ->
+    Member = pg2:get_members(To),
+    case Member of
+	[To|_]->pg2:join(N),
+		self()!subscribed;
+	{error,_} ->self()!error
+    end.
 
 publish(To,Msg)->
     ok.
