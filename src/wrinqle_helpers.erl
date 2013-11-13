@@ -17,8 +17,8 @@ deliver_message(To,Msg) when is_list(To) ->
       fun(N)->
 	      Member = pg2:get_members(N),
 	      case Member of
-		  [Pid] -> Pid ! {jiffy:encode({[{status,200},{msg,Msg}]})};
-		  {error,_}->self()!{jiffy:encode({[{status,404}]})}
+		  [Pid] -> Pid ! {send,Msg};
+		  {error,_}->self()!{error,un_availaible}
 	      end
       end,To);
 
@@ -26,8 +26,8 @@ deliver_message(To,Msg) when is_list(To) ->
 deliver_message(To,Msg)-> 
     Member = pg2:get_members(To),
     case Member of
-	[Pid]-> Pid ! {jiffy:encode({[{status,200},{msg,Msg}]})};
-	{error,_}->self()!{jiffy:encode({[{status,404}]})}
+	[Pid]-> Pid ! {send,Msg};
+	{error,_}->self()!{error,un_available}
     end.
 
 
@@ -35,8 +35,9 @@ deliver_message(To,Msg)->
 subscribe(To,Channels) when  is_list(Channels)-> 
     Member = pg2:get_members(To),
     case Member of
-	[Pid|_]-> lists:foreach(fun(N)->pg2:join(N) end);
-	{error,_}-> error
+	[To|_]-> lists:foreach(fun(N)->pg2:join(N) end),
+		  self()!subscribed;
+	{error,_}-> self()!error
     end;
 subscribe(To,Channel) ->ok.
 
