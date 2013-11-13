@@ -34,3 +34,6 @@ deliver_message(Channels,Msg) ->
 subscribe(To,Channel)->
     ok;
 subscribe(To,Channels) ->ok.
+
+publish(To,Msg)->
+    ok.
