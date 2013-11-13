@@ -31,9 +31,13 @@ deliver_message(To,Msg)->
     end.
 
 
-    
-subscribe(To,Channel) when  is_list(Channel)-> 
-    ok;
+
+subscribe(To,Channels) when  is_list(Channels)-> 
+    Member = pg2:get_members(To),
+    case Member of
+	[Pid|_]-> lists:foreach(fun(N)->pg2:join(N) end);
+	{error,_}-> error
+    end;
 subscribe(To,Channel) ->ok.
 
 publish(To,Msg)->
