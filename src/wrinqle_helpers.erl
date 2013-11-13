@@ -31,7 +31,7 @@ deliver_message(Channels,Msg) ->
 
 
     
-subscribe(To,Channel)->
+subscribe(To,Channel) when not is_list(To)->
     ok;
 subscribe(To,Channels) ->ok.
 
