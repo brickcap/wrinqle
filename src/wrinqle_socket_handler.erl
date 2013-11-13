@@ -42,6 +42,8 @@ websocket_info({error,_unavailaible},Req,State)->
 websocket_info({send,Msg},Req,State) ->
     {reply,{text,jiffy:encode({[{status,200},{msg,Msg}]})},Req,State};
 
+websocket_info(subscribed,Req,State)->
+    {reply,{text,jiffy:encode({[{status,200}]})},Req,State};
 websocket_info(_Info, Req, State) ->
     {ok, Req, State}.
 
