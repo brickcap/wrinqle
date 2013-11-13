@@ -51,7 +51,7 @@ subscribe(To,Channel) ->
 publish(Channel,Msg)-> 
     Member = pg2:get_members(Channel),
     case Member of 
-	[Channel|_]->Channel!Msg;
+	[Channel|_]->Channel!{Channel,Msg};
 	{error,_}-> self()!error
     end.
 
