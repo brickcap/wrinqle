@@ -2,6 +2,7 @@
 
 -export([add_pid/2]).
 -export([deliver_message/2]).
+-export([subscribe/2]).
 
 add_pid(Pid,Name)->
 Member = pg2:get_members(Name),
@@ -30,3 +31,6 @@ deliver_message(Channels,Msg) ->
 
 
     
+subscribe(To,Channel)->
+    ok;
+subscribe(To,Channels) ->ok.
