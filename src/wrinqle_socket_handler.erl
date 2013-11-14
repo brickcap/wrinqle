@@ -36,7 +36,7 @@ websocket_handle({text, Msg}, Req, State) ->
 
 websocket_handle(_Data, Req, State) ->  {ok, Req, State}. 
 
-websocket_info({error,_unavailaible},Req,State)->
+websocket_info({error,unavailaible},Req,State)->
     {reply,{text,jiffy:encode({[{status,404}]})},Req,State};
 
 websocket_info({send,Msg},Req,State) ->
