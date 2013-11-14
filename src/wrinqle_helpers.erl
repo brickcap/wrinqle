@@ -28,11 +28,9 @@ deliver_message(To,Msg) when is_list(To) ->
 
 deliver_message(To,Msg)-> 
     Member = pg2:get_members(To),
-    case Member of
-	[Pid]-> Pid ! {send,Msg};
-	{error,_}->self()!{error,un_available}
-    end.
-
+    [Pid|_]= Member,
+    Pid!{send,Msg}.
+   
 
 
 subscribe(To,Channels) when  is_list(Channels)-> 

@@ -17,7 +17,7 @@ websocket_init(_TransportName, Req, _Opts) ->
 websocket_handle({text, Msg}, Req, State) ->
 
     %%lager:info("Got message ~p",[Msg]),
-        try  jiffy:decode(Msg) of 
+    try  jiffy:decode(Msg) of 
 
 	 {[{<<"to">>,[H|T]},_]}-> wrinqle_helpers:deliver_message([H|T],Msg);
 
@@ -29,6 +29,7 @@ websocket_handle({text, Msg}, Req, State) ->
 	 _->{reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
     catch
+	{error,{no_such_group_name,_}}-> {reply,{text,jiffy:encode({[status,404]})}};
 	_:_-> {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
     end;
