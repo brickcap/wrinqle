@@ -7,10 +7,12 @@
 
 add_pid(Pid,Name)->
 Member = pg2:get_members(Name),
+lager:info("Member name~p",[Member]),
     case Member of
 	[Pid|_]-> ok;
 	{error,_} ->pg2:create(Name),
 		    pg2:join(Name,Pid)
+		   
     end.
 
 deliver_message(To,Msg) when is_list(To) ->

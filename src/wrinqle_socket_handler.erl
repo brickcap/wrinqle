@@ -17,14 +17,13 @@ websocket_init(_TransportName, Req, _Opts) ->
 websocket_handle({text, Msg}, Req, State) ->
 
     %%lager:info("Got message ~p",[Msg]),
-    lager:info("pid~p",[self()]),
-    try  jiffy:decode(Msg) of 
+        try  jiffy:decode(Msg) of 
 
-	 {[{<<"to">>,[H|T]},_]}-> wrinq_helpers:deliver_message([H|T],Msg);
+	 {[{<<"to">>,[H|T]},_]}-> wrinqle_helpers:deliver_message([H|T],Msg);
 
-	 {[{<<"to">>,Channel},_]}-> wrinq_helpers:deliver_message(Channel,Msg);
+	 {[{<<"to">>,Channel},_]}-> wrinqle_helpers:deliver_message(Channel,Msg);
 
-	 {[{<<"register">>,Name}]}-> wrinq_helpers:add_pid(self(),Name), 
+	 {[{<<"register">>,Name}]}-> wrinqle_helpers:add_pid(self(),Name),
 				     {reply, {text, jiffy:encode({[{registered,Name}]})}, Req, State};
 
 	 _->{reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
