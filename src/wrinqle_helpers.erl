@@ -7,11 +7,11 @@
 
 add_pid(Pid,Name)->
 
-    try Member = pg2:get_members(Name)
-	    
-    catch 
-	{error,_} ->pg2:create(Name),
-		    pg2:join(Name,Pid)
+     Member = pg2:get_members(Name),
+	 case Member of 
+	     [Pid,_]->ok;
+	{error,_} ->pg2:create(Name),		   
+		    pg2:join(Name,Pid),  
 
     end.
 
