@@ -7,23 +7,21 @@
 
 add_pid(Pid,Name)->
 
-     Member = pg2:get_members(Name),
-	 case Member of 
-	     [Pid,_]->ok;
+    Member = pg2:get_members(Name),
+    case Member of 
 	{error,_} ->pg2:create(Name),		   
 		    pg2:join(Name,Pid),  
-
-    end.
+		    lager:info("Members of the group",[pg2:get_members(Name)]);
+	_->  ok
+end.
 
 deliver_message(To,Msg) when is_list(To),erlang:length(To)>0 ->
     lists:foreach( 
       fun(N)->
-	      try Member = pg2:get_members(N),
-		   [Pid,_] = Member,
-		   Pid!{send,Msg}
-	      catch
-		  {error,{no_such_group_name,_}}-> self()!{error,unavailable},
-						   deliver_message(element(2,lists:split(N,To)),Msg)
+	      Member = pg2:get_members(N),
+	      case Member of
+		  [N,_]-> N!{send,Msg};
+		  {error,_}-> self()!{error,unavailable}
 	      end
       end,
       To);
@@ -31,9 +29,11 @@ deliver_message(To,Msg) when is_list(To),erlang:length(To)>0 ->
 
 deliver_message(To,Msg)-> 
     Member = pg2:get_members(To),
-    [Pid|_]= Member,
-    Pid!{send,Msg}.
-   
+case Member of
+    [To|_]-> To!{send,Msg};
+   {error,_}->
+    self()!{error,unavailable}
+end.
 
 
 subscribe(To,Channels) when  is_list(Channels)-> 

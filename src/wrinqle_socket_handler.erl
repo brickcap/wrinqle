@@ -31,10 +31,7 @@ websocket_handle({text, Msg}, Req, State) ->
     catch
 	{error,{no_such_group_name,_}}-> {reply,{text,jiffy:encode({[status,404]})}};
 	_:_-> {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
-    after
-	lager:info("Msg is~p",[Msg]),
-	lager:info("Registered channels~p",[pg2:which_groups()])
-
+    
     end;
 
 websocket_handle(_Data, Req, State) ->  {ok, Req, State}. 
