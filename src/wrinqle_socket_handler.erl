@@ -19,9 +19,11 @@ websocket_handle({text, Msg}, Req, State) ->
     %%lager:info("Got message ~p",[Msg]),
     try  jiffy:decode(Msg) of 
 
-	 {[{<<"to">>,Channels},_]} when is_list(Channels)-> wrinqle_helpers:deliver_message(Channels,Msg);
+	 {[{<<"to">>,Channels},{<<"msg">>,Message}]} when is_list(Channels)-> wrinqle_helpers:deliver_message(Channels,Message);
 
-	 {[{<<"to">>,Channel},_]}-> wrinqle_helpers:deliver_message(Channel,Msg);
+	 {[{<<"to">>,Channel},{<<"msg">>,Message}]}->
+
+	    wrinqle_helpers:deliver_message(Channel,Message);
 
 	 {[{<<"register">>,Name}]}-> wrinqle_helpers:add_pid(self(),Name),
 				     {reply, {text, jiffy:encode({[{registered,Name}]})}, Req, State};
@@ -31,7 +33,7 @@ websocket_handle({text, Msg}, Req, State) ->
     catch
 	{error,{no_such_group_name,_}}-> {reply,{text,jiffy:encode({[status,404]})}};
 	_:_-> {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
-    
+
     end;
 
 websocket_handle(_Data, Req, State) ->  {ok, Req, State}. 
@@ -40,6 +42,7 @@ websocket_info({error,unavailaible},Req,State)->
     {reply,{text,jiffy:encode({[{status,404}]})},Req,State};
 
 websocket_info({send,Msg},Req,State) ->
+    lager:info("Send recieved~p",{send,Msg}),
     {reply,{text,jiffy:encode({[{status,200},{msg,Msg}]})},Req,State};
 
 websocket_info(subscribed,Req,State)->
