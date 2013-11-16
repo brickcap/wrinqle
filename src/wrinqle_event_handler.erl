@@ -1,0 +1,3 @@
+-module(wrinqle_event_handler).
+-export([init/1]).
+-export([handle_event/2]).
