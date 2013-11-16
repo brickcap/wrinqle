@@ -1,7 +1,9 @@
 -module(wrinqle_event_handler).
+
 -export([init/1]).
 -export([handle_event/2]).
 
+-behaviour(gen_event).
 
 init(_Args)->
     {ok,[]}.
@@ -36,6 +38,7 @@ handle_event(subscribe,To,Channel)->
 		self()!subscribed;
 	{error,_} ->self()!error
     end;
+
 handle_event(subscribe,To,Channels) when is_list(Channels) ->
 
     Member = pg2:get_members(To),
@@ -44,3 +47,13 @@ handle_event(subscribe,To,Channels) when is_list(Channels) ->
 		 self()!subscribed;
 	{error,_}-> self()!error
     end;
+
+handle_event(publish,Channel,Msg)->
+
+    Member = pg2:get_members(Channel),
+    case Member of 
+	[Channel|_]->Channel!{Channel,Msg};
+	{error,_}-> failed
+    end.
+
+
