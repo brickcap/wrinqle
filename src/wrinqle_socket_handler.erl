@@ -21,14 +21,15 @@ websocket_handle({text, Msg}, Req, State) ->
 
 	 {[{<<"to">>,Channels},{<<"msg">>,Message}]} when is_list(Channels)->
 
-	    gen_event:notify(wrinqle_channel_events,{send_message,Channels,Message}),
+	    wrinqle_helpers:channel_event_notifier({send_message,Channels,Message}),
 
-{ok,Req,State};
+	    {ok,Req,State};
 
 	 {[{<<"to">>,Channel},{<<"msg">>,Message}]}->
 
-	    gen_event:notify(wrinqle_channel_events,{send_message,Channel,Message}),
-{ok,Req,State};
+	    wrinqle_helpers:channel_event_notifier({send_message,Channel,Message}),
+
+	    {ok,Req,State};
 
 	 {[{<<"register">>,Name}]}->
 
