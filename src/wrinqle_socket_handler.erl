@@ -19,16 +19,21 @@ websocket_handle({text, Msg}, Req, State) ->
     %%lager:info("Got message ~p",[Msg]),
     try  jiffy:decode(Msg) of 
 
-	 {[{<<"to">>,Channels},{<<"msg">>,Message}]} when is_list(Channels)-> wrinqle_helpers:deliver_message(Channels,Message);
+	 {[{<<"to">>,Channels},{<<"msg">>,Message}]} when is_list(Channels)->
+
+	    wrinqle_helpers:deliver_message(Channels,Message);
 
 	 {[{<<"to">>,Channel},{<<"msg">>,Message}]}->
 
 	    wrinqle_helpers:deliver_message(Channel,Message);
 
-	 {[{<<"register">>,Name}]}-> wrinqle_helpers:add_pid(self(),Name),
-				     {reply, {text, jiffy:encode({[{registered,Name}]})}, Req, State};
+	 {[{<<"register">>,Name}]}->
 
-	 _->{reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
+	    wrinqle_helpers:add_pid(self(),Name),
+	    {reply, {text, jiffy:encode({[{registered,Name}]})}, Req, State};
+
+	 _->
+	    {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
     catch
 	{error,{no_such_group_name,_}}-> {reply,{text,jiffy:encode({[status,404]})}};
@@ -51,7 +56,8 @@ websocket_info(subscribed,Req,State)->
 websocket_info({Channel,Msg},Req,State)->
     Member = pg2:get_members(self()),
     case list:member(Channel,Member) of
-	true->   {reply,{text,jiffy:encode({[{from,Channel},{msg,Msg}]})},Req,State};
+	true->  
+	    {reply,{text,jiffy:encode({[{from,Channel},{msg,Msg}]})},Req,State};
 	false->
 	    {ok,Req,State}
     end;
