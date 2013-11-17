@@ -15,8 +15,8 @@ start(_Type, _Args) ->
 				    [{env, [{dispatch, Dispatch}]}]),
     pg2:start(),
 
-    gen_event:start(channel_events),
-    gen_event:add_handler(channel_events,wrinqle_event_handler,[]),
+    gen_event:start({global,channel_events}),
+    gen_event:add_handler({global,channel_events},wrinqle_event_handler,[]),
 
     wrinqle_sup:start_link().
 
