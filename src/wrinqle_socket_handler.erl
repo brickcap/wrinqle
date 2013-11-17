@@ -21,16 +21,19 @@ websocket_handle({text, Msg}, Req, State) ->
 
 	 {[{<<"to">>,Channels},{<<"msg">>,Message}]} when is_list(Channels)->
 
-	    gen_event:notify(wrinqle_channel_events,{send_message,Channels,Message});
+	    gen_event:notify(wrinqle_channel_events,{send_message,Channels,Message}),
+
+{ok,Req,State};
 
 	 {[{<<"to">>,Channel},{<<"msg">>,Message}]}->
 
-	    gen_event:notify(wrinqle_channel_events,{send_message,Channel,Message});
+	    gen_event:notify(wrinqle_channel_events,{send_message,Channel,Message}),
+{ok,Req,State};
 
 	 {[{<<"register">>,Name}]}->
 
-	    wrinqle_helpers:add_pid(self(),Name);
-	   
+	    wrinqle_helpers:add_pid(self(),Name),
+	   {ok,Req,State};
 	 _->
 	    {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
