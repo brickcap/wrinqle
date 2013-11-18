@@ -70,6 +70,7 @@ handle_event({publish,Channel,Msg},State)->
 
 
 handle_event({pid_registered,pid},State) ->
+    lager:info("Got Pid~p",pid),
     pid! pid_registered,
     {ok,State};
 

@@ -2,6 +2,7 @@
 
 -export([add_pid/2]).
 -export([remove_pid/2]).
+-export([channel_event_notifier/1]).
 
 add_pid(Pid,Name)->
 
@@ -38,4 +39,6 @@ remove_pid(Pid,Name)->
     end.
 
 channel_event_notifier(Name)->
-    gen_event:notify(wrinqle_channel_events,Name).
+    Event_Pid = global:whereis_name(wrinqle_channel_events),
+    lager:info("Global pid is ~p",Event_Pid),
+    gen_event:notify(Event_Pid,Name).

@@ -32,9 +32,9 @@ websocket_handle({text, Msg}, Req, State) ->
 	    {ok,Req,State};
 
 	 {[{<<"register">>,Name}]}->
-
-	    wrinqle_helpers:add_pid(self(),Name),
-	   {ok,Req,State};
+	    lager:info("registered processes ~p",global: registered_names()),
+	  wrinqle_helpers: channel_event_notifier({pid_registered,self()}),
+	    {ok,Req,State};
 	 _->
 	    {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
@@ -67,7 +67,8 @@ websocket_info(subscribed,Req,State)->
     {reply,{text,jiffy:encode({[{status,200}]})},Req,State};
 
 websocket_info(pid_registered,Req,State)->
-    {reply,{text,registered,Req,State}};
+    lager:info("Caught ~p"),
+    {reply,{text,registered},Req,State};
 
 websocket_info(_Info, Req, State) ->
     {ok, Req, State}.
