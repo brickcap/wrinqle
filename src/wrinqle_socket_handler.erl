@@ -68,7 +68,7 @@ websocket_info(subscribed,Req,State)->
 
 websocket_info(pid_registered,Req,State)->
     lager:info("Caught ~p"),
-    {reply,{text,registered},Req,State};
+    {reply,{text,<<"OK">>},Req,State};
 
 websocket_info(_Info, Req, State) ->
     {ok, Req, State}.
