@@ -66,7 +66,22 @@ handle_event({publish,Channel,Msg},State)->
 	[Channel|_]->Channel!{Channel,Msg};
 	{error,_}-> failed
     end,
+    {ok,State};
+
+
+handle_event({pid_registered,pid},State) ->
+    pid! pid_registered,
+    {ok,State};
+
+handle_event({pid_unregistered,pid},State) ->
+    pid!pid_unregistered,
+    {ok,State};
+
+handle_event(pid_unavailable,State) ->
+
+    self()!pid_unavailable,
 	{ok,State}.
+
 
 handle_call(_, State) ->
     {ok, ok, State}.

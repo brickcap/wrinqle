@@ -13,11 +13,11 @@ add_pid(Pid,Name)->
 
 	    pg2:create(Name),		   
 	    pg2:join(Name,Pid),
-	    channel_event_notifier(pid_registered),
+	    wrinqle_event_handler: channel_event_notifier(pid_registered,Pid),
 	    lager:info("The members of channel are",pg2:get_members(Name));
 
 	_->  
-	    channel_event_notifier(channel_unavailable)
+	    channel_event_notifier(pid_unavailable)
 
     end.
 
@@ -28,12 +28,12 @@ remove_pid(Pid,Name)->
     case Member of
 
 	{error,_} -> 
-	    channel_event_notifier(channel_unavailable);
+	    wrinqle_event_handler:channel_event_notifier(pid_unavailable);
 
 	_->
 
 	    pg2:leave(Pid,Name),  
-	    channel_event_notifier(removed_pid)
+	    channel_event_notifier(pid_unregistered)
 
     end.
 
