@@ -53,8 +53,6 @@ websocket_info({send,Msg},Req,State) ->
     lager:info("Send recieved~p",{send,Msg}),
     {reply,{text,jiffy:encode({[{status,200},{msg,Msg}]})},Req,State};
 
-websocket_info(subscribed,Req,State)->
-    {reply,{text,jiffy:encode({[{status,200}]})},Req,State};
 
 websocket_info({Channel,Msg},Req,State)->
     Member = pg2:get_members(self()),
@@ -65,6 +63,11 @@ websocket_info({Channel,Msg},Req,State)->
 	    {ok,Req,State}
     end;
 
+websocket_info(subscribed,Req,State)->
+    {reply,{text,jiffy:encode({[{status,200}]})},Req,State};
+
+websocket_info(pid_registered,Req,State)->
+    {reply,{text,registered,Req,State}};
 
 websocket_info(_Info, Req, State) ->
     {ok, Req, State}.
