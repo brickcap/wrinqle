@@ -74,8 +74,8 @@ handle_event({pid_registered,pid},State) ->
     pid! pid_registered,
     {ok,State};
 
-handle_event({pid_unregistered,pid},State) ->
-    pid!pid_unregistered,
+handle_event({pid_unregistered,Pid},State) ->
+    Pid!pid_unregistered,
     {ok,State};
 
 handle_event(pid_unavailable,State) ->

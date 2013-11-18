@@ -39,6 +39,7 @@ remove_pid(Pid,Name)->
     end.
 
 channel_event_notifier(Name)->
+
     Event_Pid = global:whereis_name(wrinqle_channel_events),
-    lager:info("Global pid is ~p",Event_Pid),
+   
     gen_event:notify(Event_Pid,Name).
