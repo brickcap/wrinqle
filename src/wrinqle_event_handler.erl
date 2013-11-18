@@ -69,9 +69,9 @@ handle_event({publish,Channel,Msg},State)->
     {ok,State};
 
 
-handle_event({pid_registered,pid},State) ->
+handle_event({pid_registered,Pid},State) ->
     lager:info("Got Pid~p",pid),
-    pid! pid_registered,
+    Pid! pid_registered,
     {ok,State};
 
 handle_event({pid_unregistered,Pid},State) ->
