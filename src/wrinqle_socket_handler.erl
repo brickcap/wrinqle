@@ -39,7 +39,6 @@ websocket_handle({text, Msg}, Req, State) ->
 	    {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
     catch
-	{error,{no_such_group_name,_}}-> {reply,{text,jiffy:encode({[status,404]})}};
 	_:_-> {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
     end;
