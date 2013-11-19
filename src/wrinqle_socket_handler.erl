@@ -20,7 +20,7 @@ websocket_handle({text, Msg}, Req, State) ->
     try  jiffy:decode(Msg) of 
 
 	 {[{<<"to">>,Channels},{<<"msg">>,Message}]} when is_list(Channels)->
-
+	    
 	    wrinqle_helpers:channel_event_notifier({send_message,Channels,Message}),
 
 	    {ok,Req,State};

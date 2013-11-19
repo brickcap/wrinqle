@@ -10,13 +10,15 @@ init(_Args)->
     {ok,[]}.
 
 handle_event({send_message,To,Msg},State) when is_list(To) ->  
-
+    
     lists:foreach( 
       fun(N)->
 	      Member = pg2:get_members(N),
+	      
 	      case Member of
-
-		  [Pid,_]->Pid!{send,Msg};
+		  [Pid|_]-> 
+		      erlang:display(Pid),
+		      Pid!{send,Msg};
 		  {error,_}-> lager:info("Unavailable~p",N)
 	      end
       end,
@@ -30,9 +32,8 @@ handle_event({send_message,To,Msg},State)->
 
 
     case Member of
-	[Pid|_] -> lager:info("Check ~p",Pid),
-		   Pid!{send,Msg};
-	{error,_}-> lager:info("unavailable:",To)
+	[Pid|_] -> Pid!{send,Msg};
+	{error,_}-> lager:info("unavailable:",Member)
     end,
 	{ok,State};
 
