@@ -17,7 +17,7 @@ handle_event({send_message,To,Msg},State) when is_list(To) ->
 	      case Member of
 
 		  [Pid,_]->Pid!{send,Msg};
-		  {error,_}-> self()!{error,unavailable}
+		  {error,_}-> lager:info("Unavailable~p",N)
 	      end
       end,
       To),
