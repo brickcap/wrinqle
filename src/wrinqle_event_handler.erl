@@ -32,7 +32,7 @@ handle_event({send_message,To,Msg},State)->
     case Member of
 	[Pid|_] -> lager:info("Check ~p",Pid),
 		   Pid!{send,Msg};
-	{error,_}-> self()!{error,unavailable}
+	{error,_}-> lager:info("unavailable:",To)
     end,
 	{ok,State};
 

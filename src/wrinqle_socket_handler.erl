@@ -33,7 +33,7 @@ websocket_handle({text, Msg}, Req, State) ->
 
 	 {[{<<"register">>,Name}]}->
 	    lager:info("registered processes ~p",global: registered_names()),
-	  wrinqle_helpers: add_pid(self(),Name),
+	    wrinqle_helpers: add_pid(self(),Name),
 	    {ok,Req,State};
 	 _->
 	    {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
@@ -45,8 +45,6 @@ websocket_handle({text, Msg}, Req, State) ->
 
 websocket_handle(_Data, Req, State) ->  {ok, Req, State}. 
 
-websocket_info({error,unavailaible},Req,State)->
-    {reply,{text,jiffy:encode({[{status,404}]})},Req,State};
 
 websocket_info({send,Msg},Req,State) ->
     lager:info("Send recieved~p",{send,Msg}),
