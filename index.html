@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title></title>
+<meta charset="UTF-8">
+<title></title>
 </head>
-<body>
-	
+<body style="font-family:monospace">
+<h1>W R I N Q L E</h1>
+
+<p>An aware, distributed socket server</p>
+<p>An api that you are familliar with</p>
+ <pre style="background-color:#444;color:white;word-wrap:break-word;">
+<code>
+
+	var socket = new WebSocket('url to the server');
+	socket.onopen = function(){
+	socket.send({"register":"name"});
+	};
+	socket.onmessage = function(event){
+		console.log(event.data);
+	}
+</code>
+</pre>
 </body>
 </html>
+
