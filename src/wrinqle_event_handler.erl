@@ -17,7 +17,7 @@ handle_event({send_message,To,Msg},State) when is_list(To) ->
 	      
 	      case Member of
 		  [Pid|_]-> 
-		      erlang:display(Pid),
+		     
 		      Pid!{send,Msg};
 		  {error,_}-> lager:info("Unavailable~p",N)
 	      end
