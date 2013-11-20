@@ -37,6 +37,8 @@ websocket_handle({text, Msg}, Req, State) ->
 	    {ok,Req,State};
 
 	 {[{<<"subscribe">>,Channels},{_,To}]}-> 
+	    erlang:display("In subscribe"),
+
 	    wrinqle_helpers:channel_event_notifier({subscribe,To,Channels}),
 	    {ok,Req,State};
 
