@@ -44,7 +44,7 @@ handle_event({subscribe,To,Channels},State) when is_list(Channels) ->
     Member = pg2:get_members(To),
     case Member of
 	[To|_]-> lists:foreach(fun(N)->pg2:join(N) end),
-		 self()!subscribed;
+		 To!subscribed;
 	{error,_}-> self()!error
     end,
     {ok,State};
@@ -56,7 +56,7 @@ handle_event({subscribe,To,Channel},State)->
     case Member of
 	[To|_]->pg2:join(Channel),
 		self()!subscribed;
-	{error,_} ->self()!error
+	{error,_} ->lager:info("Unavailable")
     end,
 	{ok,State};
 
@@ -64,8 +64,8 @@ handle_event({publish,Channel,Msg},State)->
 
     Member = pg2:get_members(Channel),
     case Member of 
-	[Channel|_]->Channel!{Channel,Msg};
-	{error,_}-> failed
+	[Channel|_]->Channel!{send,Msg};
+	{error,_}-> lager:info("unavailable")
     end,
     {ok,State};
 
