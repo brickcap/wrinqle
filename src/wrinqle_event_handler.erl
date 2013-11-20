@@ -54,11 +54,19 @@ handle_event({subscribe,To,Channel},State)->
 
     Member = pg2:get_members(To),
     case Member of
-	[To|_]->pg2:join(Channel,To),
-		To!subscribed;
-	{error,_} ->lager:info("Unavailable")
-    end,
-	{ok,State};
+	[_|_]->
+
+	    Member_Pids = pg2:get_members(Channel),
+	    case Member_Pids of
+		[Pid|_]->
+		    pg2:join(Pid,To),
+		    To!subscribed;
+
+		{error,_}-> lager:info("Unavailable")
+	    end;
+	    {error,_} ->lager:info("Unavailable")
+	      end,
+    {ok,State};
 
 handle_event({publish,Channel,Msg},State)->
 
