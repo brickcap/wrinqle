@@ -36,17 +36,19 @@ websocket_handle({text, Msg}, Req, State) ->
 	    wrinqle_helpers: add_pid(self(),Name),
 	    {ok,Req,State};
 
-	 {[{<<"subscribe">>,Channels},{_,To}]}-> 
+	 {[{<<"subscribe">>,Channels},{<<"to">>,To}]}-> 
 	    erlang:display("In subscribe"),
 
 	    wrinqle_helpers:channel_event_notifier({subscribe,To,Channels}),
 	    {ok,Req,State};
 
-	 {[{<<"publish">>,Msg},{_,Channel}]}->
-	    wrinqle_helpers: channel_event_notifier({publish,Channel,Msg}),
+	 {[{<<"publish">>,Msg},{<<"to">>,Channel}]}->
+	    erlang:display("Triggering Publish"),
+	    wrinqle_helpers: channel_event_notifier({publish,Msg,Channel}),
 	    {ok,Req,State};
-	 _->
-	    {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
+	 A->
+	   
+	    {reply, {text, jiffy:encode({[{error,<<"invalid packet">>}]})}, Req, State}
 
     catch
 	_:_-> {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}

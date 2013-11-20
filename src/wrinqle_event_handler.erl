@@ -54,7 +54,7 @@ handle_event({subscribe,To,Channels},State) when is_list(Channels) ->
 			  {error,_} -> lager:info("Unavailable")
 		      end
 	      end,Channels);
-		 
+
 	{error,_}-> self()!error
     end,
     {ok,State};
@@ -73,12 +73,13 @@ handle_event({subscribe,To,Channel},State)->
 		    Pid!subscribed;
 		{error,_}-> lager:info("Unavailable")
 	    end;
-	    {error,_} ->lager:info("Unavailable")
-	      end,
+	{error,_} ->lager:info("Unavailable")
+    end,
     {ok,State};
 
-handle_event({publish,Channel,Msg},State)->
-
+handle_event({publish,Channel,Msg},State) when is_list(Channel)->
+    erlang:display("In publish"),
+    erlang:display(Msg),
     Member = pg2:get_members(Channel),
     case Member of 
 	[Channel|_]->Channel!{send,Msg};
