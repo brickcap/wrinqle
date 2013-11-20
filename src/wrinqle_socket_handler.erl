@@ -35,6 +35,14 @@ websocket_handle({text, Msg}, Req, State) ->
 	    lager:info("registered processes ~p",global: registered_names()),
 	    wrinqle_helpers: add_pid(self(),Name),
 	    {ok,Req,State};
+
+	 {[{<<"subscribe">>,Channels},{_,To}]}-> 
+	    wrinqle_helpers:channel_event_notifier({subscribe,To,Channels}),
+	    {ok,Req,State};
+
+	 {[{<<"publish">>,Msg},{_,Channel}]}->
+	    wrinqle_helpers: channel_event_notifier({publish,Channel,Msg}),
+	    {ok,Req,State};
 	 _->
 	    {reply, {text, jiffy:encode({[{error,<<"invalid json">>}]})}, Req, State}
 
