@@ -49,11 +49,12 @@ handle_event({subscribe,To,Channels},State) when is_list(Channels) ->
 		      Member_pids = pg2:get_members(N),
 		      case Member_pids of
 			  [Pid|_]->
-			      pg2:join(To,Pid);
+			      pg2:join(To,Pid),
+			      Pid! subscribed;
 			  {error,_} -> lager:info("Unavailable")
 		      end
-	      end,Channels),
-		 To!subscribed;
+	      end,Channels);
+		 
 	{error,_}-> self()!error
     end,
     {ok,State};
@@ -69,7 +70,7 @@ handle_event({subscribe,To,Channel},State)->
 	    case Member_Pids of
 		[Pid|_]->
 		    pg2:join(To,Pid),
-		    To!subscribed;
+		    Pid!subscribed;
 		{error,_}-> lager:info("Unavailable")
 	    end;
 	    {error,_} ->lager:info("Unavailable")
