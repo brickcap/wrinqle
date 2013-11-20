@@ -43,7 +43,7 @@ handle_event({subscribe,To,Channels},State) when is_list(Channels) ->
 
     Member = pg2:get_members(To),
     case Member of
-	[To|_]-> lists:foreach(fun(N)->pg2:join(N) end),
+	[_|_]-> lists:foreach(fun(N)->pg2:join(N,To) end),
 		 To!subscribed;
 	{error,_}-> self()!error
     end,
