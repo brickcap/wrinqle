@@ -19,34 +19,35 @@ websocket_handle({text, Msg}, Req, State) ->
     %%lager:info("Got message ~p",[Msg]),
     try  jiffy:decode(Msg) of 
 
-	 {[{<<"to">>,Channels},{<<"msg">>,Message}]} when is_list(Channels)->
+	 {[{<<"to">>,Multi_Channels},{<<"msg">>,Multi_Message}]} when is_list(Multi_Channels)->
 	    
-	    wrinqle_helpers:channel_event_notifier({send_message,Channels,Message}),
+	    wrinqle_helpers:channel_event_notifier({send_message,Multi_Channels,Multi_Message}),
 
 	    {ok,Req,State};
 
-	 {[{<<"to">>,Channel},{<<"msg">>,Message}]}->
+	 {[{<<"to">>,Single_Channel},{<<"msg">>,Single_Message}]}->
 
-	    wrinqle_helpers:channel_event_notifier({send_message,Channel,Message}),
+	    wrinqle_helpers:channel_event_notifier({send_message,Single_Channel,Single_Message}),
 
 	    {ok,Req,State};
 
-	 {[{<<"register">>,Name}]}->
+	 {[{<<"register">>,Register_Name}]}->
 	    lager:info("registered processes ~p",global: registered_names()),
-	    wrinqle_helpers: add_pid(self(),Name),
+	    wrinqle_helpers: add_pid(self(),Register_Name),
 	    {ok,Req,State};
 
-	 {[{<<"subscribe">>,Channels},{<<"to">>,To}]}-> 
+	 {[{<<"subscribe">>,Subscribe_Channels},{<<"to">>,To}]}-> 
 	    erlang:display("In subscribe"),
 
-	    wrinqle_helpers:channel_event_notifier({subscribe,To,Channels}),
+	    wrinqle_helpers:channel_event_notifier({subscribe,To,Subscribe_Channels}),
 	    {ok,Req,State};
 
-	 {[{<<"publish">>,Msg},{<<"to">>,Channel}]}->
+	 {[{<<"publish">>,Publish_Msg},{<<"to">>,Pub_Channel}]}->
 	    erlang:display("Triggering Publish"),
-	    wrinqle_helpers: channel_event_notifier({publish,Msg,Channel}),
+	    wrinqle_helpers: channel_event_notifier({publish,Publish_Msg,Pub_Channel}),
 	    {ok,Req,State};
-	 A->
+
+	 _->
 	   
 	    {reply, {text, jiffy:encode({[{error,<<"invalid packet">>}]})}, Req, State}
 
