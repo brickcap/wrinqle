@@ -9,7 +9,7 @@
 init(_Args)->
     {ok,[]}.
 
-handle_event({send_message,To,Msg},State) when is_list(To) ->  
+handle_event({send_message,Multi_Channels,Multi_Msg},State) when is_list(Multi_Channels) ->  
     
     lists:foreach( 
       fun(N)->
@@ -18,21 +18,21 @@ handle_event({send_message,To,Msg},State) when is_list(To) ->
 	      case Member of
 		  [Pid|_]-> 
 		     
-		      Pid!{send,Msg};
+		      Pid!{send,Multi_Msg};
 		  {error,_}-> lager:info("Unavailable~p",N)
 	      end
       end,
-      To),
+      Multi_Channels),
 	{ok,State};
 
 
-handle_event({send_message,To,Msg},State)-> 
+handle_event({send_message,Single_Channel,Single_Msg},State)-> 
 
-    Member = pg2:get_members(To),
+    Member = pg2:get_members(Single_Channel),
 
 
     case Member of
-	[Pid|_] -> Pid!{send,Msg};
+	[Pid|_] -> Pid!{send,Single_Msg};
 	{error,_}-> lager:info("unavailable:",Member)
     end,
 	{ok,State};
