@@ -7,7 +7,7 @@
 -export([websocket_info/3]).
 -export([websocket_terminate/3]).
 
-init({tcp, http}, _Req, _Opts) ->
+init({tcp, http}, _Req,_Opts) ->
     {upgrade, protocol, cowboy_websocket}.
 
 websocket_init(_TransportName, Req, _Opts) ->
@@ -59,16 +59,16 @@ websocket_handle({text, Msg}, Req, State) ->
 websocket_handle(_Data, Req, State) ->  {ok, Req, State}. 
 
 
-websocket_info({send,Msg},Req,State) ->
-    lager:info("Send recieved~p",{send,Msg}),
-    {reply,{text,jiffy:encode({[{status,200},{msg,Msg}]})},Req,State};
+websocket_info({send,Socket_Send_Msg},Req,State) ->
+    lager:info("Send recieved~p",{send,Socket_Send_Msg}),
+    {reply,{text,jiffy:encode({[{status,200},{msg,Socket_Send_Msg}]})},Req,State};
 
 
-websocket_info({Channel,Msg},Req,State)->
+websocket_info({Channel,Socket_Channel_Msg},Req,State)->
     Member = pg2:get_members(self()),
     case list:member(Channel,Member) of
 	true->  
-	    {reply,{text,jiffy:encode({[{from,Channel},{msg,Msg}]})},Req,State};
+	    {reply,{text,jiffy:encode({[{from,Channel},{msg,Socket_Channel_Msg}]})},Req,State};
 	false->
 	    {ok,Req,State}
     end;
