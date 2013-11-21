@@ -39,9 +39,9 @@ handle_event({send_message,Single_Channel,Single_Msg},State)->
 
 
 
-handle_event({subscribe,To,Channels},State) when is_list(Channels) ->
+handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subscribers) ->
 
-    Member = pg2:get_members(To),
+    Member = pg2:get_members(Multi_Subscribe_To),
     case Member of
 	[_|_]-> 
 	    lists:foreach(
@@ -49,27 +49,27 @@ handle_event({subscribe,To,Channels},State) when is_list(Channels) ->
 		      Member_pids = pg2:get_members(N),
 		      case Member_pids of
 			  [Pid|_]->
-			      pg2:join(To,Pid),
+			      pg2:join(Multi_Subscribe_To,Pid),
 			      Pid! subscribed;
 			  {error,_} -> lager:info("Unavailable")
 		      end
-	      end,Channels);
+	      end,Subscribers);
 
 	{error,_}-> self()!error
     end,
     {ok,State};
 
 
-handle_event({subscribe,To,Channel},State)->
+handle_event({subscribe,Single_Subscribe_To,Subscriber},State)->
 
-    Member = pg2:get_members(To),
+    Member = pg2:get_members(Single_Subscribe_To),
     case Member of
 	[_|_]->
 
-	    Member_Pids = pg2:get_members(Channel),
+	    Member_Pids = pg2:get_members(Subscriber),
 	    case Member_Pids of
 		[Pid|_]->
-		    pg2:join(To,Pid),
+		    pg2:join(Single_Subscribe_To,Pid),
 		    Pid!subscribed;
 		{error,_}-> lager:info("Unavailable")
 	    end;
