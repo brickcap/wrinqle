@@ -66,7 +66,7 @@ handle_event({subscribe,Single_Subscribe_To,Subscriber},State)->
 
     Member = pg2:get_members(Single_Subscribe_To),
     case Member of
-	[_|_]->
+	[M|_]->
 
 	    Member_Pids = pg2:get_members(Subscriber),
 	    case Member_Pids of
@@ -75,7 +75,8 @@ handle_event({subscribe,Single_Subscribe_To,Subscriber},State)->
 		    pg2:join(Single_Subscribe_To,Pid),
 		    Pid!subscribed;
 		{error,_}-> lager:info("Unavailable")
-	    end;
+	    end,
+	     M!{send,{[{<<"subcribed">>,<<"ok">>}]}};
 	{error,_} ->lager:info("Unavailable")
     end,
     {ok,State};
