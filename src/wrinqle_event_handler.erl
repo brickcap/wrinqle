@@ -43,7 +43,7 @@ handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subs
 
     Member = pg2:get_members(Multi_Subscribe_To),
     case Member of
-	[_|_]-> 
+	[M|_]-> 
 	    lists:foreach(
 	      fun(N)->
 		      Member_pids = pg2:get_members(N),
@@ -53,7 +53,8 @@ handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subs
 			      Pid! subscribed;
 			  {error,_} -> lager:info("Unavailable")
 		      end
-	      end,Subscribers);
+	      end,Subscribers),
+	    M!{send,{[{<<"subcribed">>,<<"ok">>}]}};
 
 	{error,_}-> self()!error
     end,
@@ -82,7 +83,7 @@ handle_event({publish,Publish_Msg,Publishing_Channel},State)->
     Member = pg2:get_members(Publishing_Channel),
     case Member of 
 	[M|O]->
-	       [Pid!Publish_Msg||Pid<-[M|O]];
+	    [Pid!{send,Publish_Msg}||Pid<-[M|O]];
 	{error,_}-> lager:info("unavailable")
     end,
     {ok,State};
