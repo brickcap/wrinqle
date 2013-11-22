@@ -64,15 +64,6 @@ websocket_info({send,Socket_Send_Msg},Req,State) ->
     {reply,{text,jiffy:encode({[{status,200},{msg,Socket_Send_Msg}]})},Req,State};
 
 
-websocket_info({Channel,Socket_Channel_Msg},Req,State)->
-    Member = pg2:get_members(self()),
-    case list:member(Channel,Member) of
-	true->  
-	    {reply,{text,jiffy:encode({[{from,Channel},{msg,Socket_Channel_Msg}]})},Req,State};
-	false->
-	    {ok,Req,State}
-    end;
-
 websocket_info(subscribed,Req,State)->
     {reply,{text,jiffy:encode({[{status,200}]})},Req,State};
 
