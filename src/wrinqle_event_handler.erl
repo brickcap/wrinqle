@@ -96,12 +96,7 @@ handle_event({pid_registered,Pid},State) ->
 
 handle_event({pid_unregistered,Pid},State) ->
     Pid!pid_unregistered,
-    {ok,State};
-
-handle_event(pid_unavailable,State) ->
-
-    self()!pid_unavailable,
-	{ok,State}.
+    {ok,State}.
 
 
 handle_call(_, State) ->
