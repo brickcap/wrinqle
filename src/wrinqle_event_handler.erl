@@ -10,20 +10,20 @@ init(_Args)->
     {ok,[]}.
 
 handle_event({send_message,Multi_Channels,Multi_Msg},State) when is_list(Multi_Channels) ->  
-    
+
     lists:foreach( 
       fun(N)->
 	      Member = pg2:get_members(N),
-	      
+
 	      case Member of
 		  [Pid|_]-> 
-		     
+
 		      Pid!{send,Multi_Msg};
 		  {error,_}-> lager:info("Unavailable~p",N)
 	      end
       end,
       Multi_Channels),
-	{ok,State};
+    {ok,State};
 
 
 handle_event({send_message,Single_Channel,Single_Msg},State)-> 
@@ -35,7 +35,7 @@ handle_event({send_message,Single_Channel,Single_Msg},State)->
 	[Pid|_] -> Pid!{send,Single_Msg};
 	{error,_}-> lager:info("unavailable:",Member)
     end,
-	{ok,State};
+    {ok,State};
 
 
 
@@ -78,11 +78,11 @@ handle_event({subscribe,Single_Subscribe_To,Subscriber},State)->
     {ok,State};
 
 handle_event({publish,Publish_Msg,Publishing_Channel},State)->
-    erlang:display("In publish"),
-    erlang:display(Publish_Msg),
+
     Member = pg2:get_members(Publishing_Channel),
     case Member of 
-	[Publishing_Channel|_]->Publishing_Channel!{send,Publish_Msg};
+	[_|_]->
+	    lists:foreach( fun(N)-> N!Publish_Msg end,Member);
 	{error,_}-> lager:info("unavailable")
     end,
     {ok,State};
