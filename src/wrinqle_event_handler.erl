@@ -82,7 +82,7 @@ handle_event({publish,Publish_Msg,Publishing_Channel},State)->
     Member = pg2:get_members(Publishing_Channel),
     case Member of 
 	[_|_]->
-	    lists:foreach( fun(N)-> N!Publish_Msg end,Member);
+	    lists:foreach( fun(N)-> N!{send,Publish_Msg} end,Member);
 	{error,_}-> lager:info("unavailable")
     end,
     {ok,State};
