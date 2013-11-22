@@ -77,7 +77,7 @@ handle_event({subscribe,Single_Subscribe_To,Subscriber},State)->
     end,
     {ok,State};
 
-handle_event({publish,Publishing_Channel,Publish_Msg},State) when is_list(Publishing_Channel)->
+handle_event({publish,Publish_Msg,Publishing_Channel},State)->
     erlang:display("In publish"),
     erlang:display(Publish_Msg),
     Member = pg2:get_members(Publishing_Channel),
