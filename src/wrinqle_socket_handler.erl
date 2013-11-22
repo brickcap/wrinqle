@@ -34,7 +34,7 @@ websocket_handle({text, Msg}, Req, State) ->
 	 {[{<<"register">>,Register_Name}]}->
 	    lager:info("registered processes ~p",global: registered_names()),
 	    wrinqle_helpers: add_pid(self(),Register_Name),
-	    {ok,Req,State};
+	    {ok,Req,Register_Name};
 
 	 {[{<<"subscribe">>,Subscribe_Channels},{<<"to">>,To}]}-> 
 	    erlang:display("In subscribe"),
@@ -75,5 +75,6 @@ websocket_info(_Info, Req, State) ->
     {ok, Req, State}.
 
 websocket_terminate(_Reason, _Req, _State) ->
+    pg2:delete(_State),
     ok.
 

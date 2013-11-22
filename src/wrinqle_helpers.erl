@@ -16,11 +16,7 @@ add_pid(Pid,Name)->
 	    pg2:join(Name,Pid),
 	    channel_event_notifier({pid_registered,Pid}),
 	    lager:info("The members of channel are",pg2:get_members(Name));
-
-	[Pid|_]-> ok;
-
-	[]-> pg2:join(Name,Pid),
-		channel_event_notifier({pid_registered,Pid});
+	
 	_->  
 	    ok
 
