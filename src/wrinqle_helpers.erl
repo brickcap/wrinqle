@@ -17,8 +17,10 @@ add_pid(Pid,Name)->
 	    channel_event_notifier({pid_registered,Pid}),
 	    lager:info("The members of channel are",pg2:get_members(Name));
 
-	[_|_]-> ok;
+	[Pid|_]-> ok;
 
+	[]-> pg2:join(Name,Pid),
+		channel_event_notifier({pid_registered,Pid});
 	_->  
 	    ok
 
@@ -32,10 +34,7 @@ remove_pid(Pid,Name)->
 
 	{error,_} -> ok;
 	_->
-
-	    pg2:leave(Pid,Name),  
-	    channel_event_notifier(pid_unregistered)
-
+	    pg2:leave(Pid,Name)  
     end.
 
 channel_event_notifier(Name)->
