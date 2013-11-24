@@ -26,7 +26,7 @@ websocket_handle({text, Msg}, Req, State) ->
 	    {ok,Req,State};
 
 	 {[{<<"to">>,Single_Channel},{<<"msg">>,Single_Message}]}->
-
+	    
 	    wrinqle_helpers:channel_event_notifier({send_message,Single_Channel,Single_Message}),
 
 	    {ok,Req,State};
@@ -37,14 +37,14 @@ websocket_handle({text, Msg}, Req, State) ->
 	    {ok,Req,Register_Name};
 
 	 {[{<<"subscribe">>,Subscribe_Channels},{<<"to">>,To}]}-> 
-	    erlang:display("In subscribe"),
-
-	    wrinqle_helpers:channel_event_notifier({subscribe,To,Subscribe_Channels}),
+	    [_|T] = Subscribe_Channels, 
+	    
+	    wrinqle_helpers:channel_event_notifier({subscribe,To,T}),
 	    {ok,Req,State};
 
 	 {[{<<"publish">>,Publish_Msg},{<<"to">>,Pub_Channel}]}->
-	    erlang:display("Triggering Publish"),
-	    wrinqle_helpers: channel_event_notifier({publish,Publish_Msg,Pub_Channel}),
+	   [_|T] = Pub_Channel,
+	    wrinqle_helpers: channel_event_notifier({publish,T,Publish_Msg}),
 	    {ok,Req,State};
 
 	 _->
