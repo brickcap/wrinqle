@@ -20,8 +20,8 @@ websocket_handle({text, Msg}, Req, State) ->
     try  jiffy:decode(Msg) of 
 
 	 {[{<<"to">>,Multi_Channels},{<<"msg">>,Multi_Message}]} when is_list(Multi_Channels)->
-	    [_|T]= Multi_Channels,
-	    wrinqle_helpers:channel_event_notifier({send_message,T,Multi_Message}),
+	   
+	    wrinqle_helpers:channel_event_notifier({send_message, Multi_Channels,Multi_Message}),
 
 	    {ok,Req,State};
 
@@ -37,14 +37,13 @@ websocket_handle({text, Msg}, Req, State) ->
 	    {ok,Req,Register_Name};
 
 	 {[{<<"subscribe">>,Subscribe_Channels},{<<"to">>,To}]}-> 
-	    [_|T] = Subscribe_Channels, 
-	    
-	    wrinqle_helpers:channel_event_notifier({subscribe,To,T}),
+	    	    
+	    wrinqle_helpers:channel_event_notifier({subscribe,To,Subscribe_Channels}),
 	    {ok,Req,State};
 
 	 {[{<<"publish">>,Publish_Msg},{<<"to">>,Pub_Channel}]}->
-	   [_|T] = Pub_Channel,
-	    wrinqle_helpers: channel_event_notifier({publish,T,Publish_Msg}),
+	   
+	    wrinqle_helpers: channel_event_notifier({publish,Publish_Msg,Pub_Channel}),
 	    {ok,Req,State};
 
 	 _->
