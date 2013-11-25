@@ -79,5 +79,6 @@ websocket_info(_Info, Req, State) ->
 websocket_terminate(_Reason, _Req, _State) ->
 
     pg2:delete(_State),
+    pg2:delete(wrinqle_helpers:subscriber_channel_name(_State)),
     ok.
 
