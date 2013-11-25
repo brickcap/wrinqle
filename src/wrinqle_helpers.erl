@@ -3,6 +3,7 @@
 -export([add_pid/2]).
 -export([remove_pid/2]).
 -export([channel_event_notifier/1]).
+-export([subscriber_channel_name/1]).
 
 add_pid(Pid,Name)->
 
@@ -15,7 +16,7 @@ add_pid(Pid,Name)->
 	    pg2:create(Name),		   
 	    pg2:join(Name,Pid),
 	    channel_event_notifier({pid_registered,Pid}),
-	    lager:info("The members of channel are",pg2:get_members(Name));
+	    lager:info("The members of channel are",[Name,pg2:get_members(Name)]);
 	
 	_->  
 	    ok
@@ -32,6 +33,10 @@ remove_pid(Pid,Name)->
 	_->
 	    pg2:leave(Pid,Name)  
     end.
+
+subscriber_channel_name(Name)->
+
+    <<Name/binary,<<"_subscribers">>/binary>>.
 
 channel_event_notifier(Name)->
     Event_Pid = global:whereis_name(wrinqle_channel_events),   

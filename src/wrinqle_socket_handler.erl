@@ -19,18 +19,22 @@ websocket_handle({text, Msg}, Req, State) ->
    
     try  jiffy:decode(Msg) of 
 
-	 {[{<<"to">>,Multi_Channels},{<<"msg">>,Multi_Message}]} when is_list(Multi_Channels)->
 
-	    True_Channels = lists:delete(State,Multi_Channels),
-	    wrinqle_helpers:channel_event_notifier({send_message, True_Channels,Multi_Message}),
-
-	    {ok,Req,State};
-
-	
 	 {[{<<"register">>,Register_Name}]}->
 
 	    wrinqle_helpers: add_pid(self(),Register_Name),
 	    {ok,Req,Register_Name};
+
+
+	 {[{<<"to">>,Multi_Channels},{<<"msg">>,Multi_Message}]} when is_list(Multi_Channels)->
+
+	    True_Channels = lists:delete(State,Multi_Channels),
+	    lager:info("The true channels are",[True_Channels]),
+	    wrinqle_helpers:channel_event_notifier({send_message,True_Channels,Multi_Message}),
+
+	    {ok,Req,State};
+
+
 
 	 {[{<<"subscribe">>,Subscribe_Channels},{<<"to">>,To}]}-> 
 
@@ -57,7 +61,6 @@ websocket_handle(_Data, Req, State) ->  {ok, Req, State}.
 
 websocket_info({send,Socket_Send_Msg},Req,State) ->
 
-    lager:info("Send recieved",[{send,Socket_Send_Msg}]),
     {reply,{text,jiffy:encode({[{status,200},{msg,Socket_Send_Msg}]})},Req,State};
 
 
