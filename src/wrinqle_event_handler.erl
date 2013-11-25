@@ -14,7 +14,7 @@ handle_event({send_message,Multi_Channels,Multi_Msg},State) when is_list(Multi_C
     lists:foreach( 
       fun(N)->
 	      Member = pg2:get_members(N),
-
+	      
 	      case Member of
 		  [Pid|_]-> 
 
@@ -24,19 +24,6 @@ handle_event({send_message,Multi_Channels,Multi_Msg},State) when is_list(Multi_C
       end,
       Multi_Channels),
     {ok,State};
-
-
-handle_event({send_message,Single_Channel,Single_Msg},State)-> 
-
-    Member = pg2:get_members(Single_Channel),
-    
-    
-    case Member of
-	[Pid|_] ->erlang:display(Pid), Pid!{send,Single_Msg};
-	{error,_}-> lager:info("unavailable:",Member)
-    end,
-    {ok,State};
-
 
 
 handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subscribers) ->
@@ -60,24 +47,6 @@ handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subs
     end,
     {ok,State};
 
-
-handle_event({subscribe,Single_Subscribe_To,Subscriber},State)->
-
-    Member = pg2:get_members(Single_Subscribe_To),
-    case Member of
-	[M|_]->
-
-	    Member_Pids = pg2:get_members(Subscriber),
-	    case Member_Pids of
-		[Pid|_]->
-		    pg2:join(Single_Subscribe_To,Pid),
-		    Pid!subscribed;
-		{error,_}-> lager:info("Unavailable")
-	    end,
-	     M!{send,{[{<<"subcribed">>,<<"ok">>}]}};
-	{error,_} ->lager:info("Unavailable")
-    end,
-    {ok,State};
 
 handle_event({publish,Publish_Msg,Publishing_Channel},State)->
 

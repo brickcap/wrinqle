@@ -16,7 +16,7 @@ websocket_init(_TransportName, Req, _Opts) ->
 
 websocket_handle({text, Msg}, Req, State) ->
 
-    %%lager:info("Got message ~p",[Msg]),
+   
     try  jiffy:decode(Msg) of 
 
 	 {[{<<"to">>,Multi_Channels},{<<"msg">>,Multi_Message}]} when is_list(Multi_Channels)->
@@ -25,15 +25,7 @@ websocket_handle({text, Msg}, Req, State) ->
 
 	    {ok,Req,State};
 
-	 {[{<<"to">>,Single_Channel},{<<"msg">>,Single_Message}]}->
-
-	    case Single_Channel =:= State of
-		true-> ok;
-		false -> 
-		    wrinqle_helpers:channel_event_notifier({send_message,Single_Channel,Single_Message})
-	    end,
-	    {ok,Req,State};
-
+	
 	 {[{<<"register">>,Register_Name}]}->
 
 	    wrinqle_helpers: add_pid(self(),Register_Name),
@@ -62,7 +54,7 @@ websocket_handle(_Data, Req, State) ->  {ok, Req, State}.
 
 
 websocket_info({send,Socket_Send_Msg},Req,State) ->
-    lager:info("Send recieved~p",{send,Socket_Send_Msg}),
+    lager:info("Send recieved",[{send,Socket_Send_Msg}]),
     {reply,{text,jiffy:encode({[{status,200},{msg,Socket_Send_Msg}]})},Req,State};
 
 
