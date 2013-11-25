@@ -20,6 +20,7 @@ websocket_handle({text, Msg}, Req, State) ->
     try  jiffy:decode(Msg) of 
 
 	 {[{<<"to">>,Multi_Channels},{<<"msg">>,Multi_Message}]} when is_list(Multi_Channels)->
+
 	    True_Channels = lists:delete(State,Multi_Channels),
 	    wrinqle_helpers:channel_event_notifier({send_message, True_Channels,Multi_Message}),
 
@@ -32,6 +33,7 @@ websocket_handle({text, Msg}, Req, State) ->
 	    {ok,Req,Register_Name};
 
 	 {[{<<"subscribe">>,Subscribe_Channels},{<<"to">>,To}]}-> 
+
 	    True_Channels = lists:delete(State,Subscribe_Channels),
 	    wrinqle_helpers:channel_event_notifier({subscribe,To,True_Channels}),
 	    {ok,Req,State};
@@ -54,21 +56,25 @@ websocket_handle(_Data, Req, State) ->  {ok, Req, State}.
 
 
 websocket_info({send,Socket_Send_Msg},Req,State) ->
+
     lager:info("Send recieved",[{send,Socket_Send_Msg}]),
     {reply,{text,jiffy:encode({[{status,200},{msg,Socket_Send_Msg}]})},Req,State};
 
 
 websocket_info(subscribed,Req,State)->
+
     {reply,{text,jiffy:encode({[{status,200}]})},Req,State};
 
 websocket_info(pid_registered,Req,State)->
-    lager:info("Caught ~p"),
+    
     {reply,{text,<<"OK">>},Req,State};
 
 websocket_info(_Info, Req, State) ->
+
     {ok, Req, State}.
 
 websocket_terminate(_Reason, _Req, _State) ->
+
     pg2:delete(_State),
     ok.
 
