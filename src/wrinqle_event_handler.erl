@@ -28,7 +28,7 @@ handle_event({send_message,Multi_Channels,Multi_Msg},State) when is_list(Multi_C
 
 handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subscribers) ->
 
-    Subscriber_Channel = wrinqle_helpers:create_subscriber_channel(Multi_Subscribe_To), 
+    Subscriber_Channel = wrinqle_helpers:subscriber_channel_name(Multi_Subscribe_To), 
     pg2:create(Subscriber_Channel),
     [M|_] = pg2:get_members(Multi_Subscribe_To),
     case M of 
@@ -51,7 +51,7 @@ handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subs
 
 handle_event({publish,Publish_Msg,Publishing_Channel},State)->
 
-    Member = pg2:get_members(Publishing_Channel),
+    Member = pg2:get_members(wrinqle_helpers:subscriber_channel_name(Publishing_Channel)),
     case Member of 
 	[M|O]->
 	    [Pid!{send,Publish_Msg}||Pid<-[M|O]];
