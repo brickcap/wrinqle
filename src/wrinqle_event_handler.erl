@@ -29,24 +29,17 @@ handle_event({send_message,Multi_Channels,Multi_Msg},State) when is_list(Multi_C
 handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subscribers) ->
 
     Subscriber_Channel = wrinqle_helpers:subscriber_channel_name(Multi_Subscribe_To), 
-    pg2:create(Subscriber_Channel),
-    [M|_] = pg2:get_members(Multi_Subscribe_To),
+    [M|_]= pg2:get_members(Subscriber_Channel), 
     case M of 
-	{error,_}->ok;
+	{error,_}->
+	    pg2:create(Subscriber_Channel),
+	    wrinqle_helpers:add_subscribers(Subscriber_Channel,Subscribers);
 	_->
-  	    lists:foreach(
-	      fun(N)->
-		      Member_pids = pg2:get_members(N),
-		      case Member_pids of
-			  [Pid|_]->
-			      pg2:join(Subscriber_Channel,Pid),
-			      Pid! subscribed;
-			  {error,_} -> lager:info("Unavailable")
-		      end
-	      end,Subscribers)
+	    wrinqle_helpers:add_subscribers(Subscriber_Channel,Subscribers) 
     end,
-    M!{send,{[{<<"subcribed">>,<<"ok">>}]}},
-{ok,State};
+    [G|_]= pg2:get_members(Multi_Subscribe_To),
+    G!{send,{[{<<"subcribed">>,<<"ok">>}]}},
+    {ok,State};
 
 
 handle_event({publish,Publish_Msg,Publishing_Channel},State)->
