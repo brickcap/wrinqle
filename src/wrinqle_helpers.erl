@@ -1,18 +1,9 @@
 -module(wrinqle_helpers).
 
--export([add_pid/2]).
 -export([remove_pid/2]).
 -export([channel_event_notifier/1]).
 -export([subscriber_channel_name/1]).
 -export([add_subscribers/2]).
-
-add_pid(Pid,Name)->	
-
-    pg2:create(Name),		   
-    pg2:join(Name,Pid),
-    channel_event_notifier({pid_registered,Pid}),
-    lager:info("The members of channel are",[Name,pg2:get_members(Name)]).
-
 
 remove_pid(Pid,Name)->
 

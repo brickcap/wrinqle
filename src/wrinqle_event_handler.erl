@@ -53,8 +53,12 @@ handle_event({publish,Publish_Msg,Publishing_Channel},State)->
     {ok,State};
 
 
-handle_event({pid_registered,Pid},State) ->
+handle_event({register_pid,Pid,Name},State) ->
+
     lager:info("Got Pid~p",pid),
+    pg2:create(Name),		   
+    pg2:join(Name,Pid),
+    lager:info("The members of channel are",[Name,pg2:get_members(Name)]),
     Pid! pid_registered,
     {ok,State}.
 

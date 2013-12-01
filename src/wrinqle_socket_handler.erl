@@ -22,7 +22,7 @@ websocket_handle({text, Msg}, Req, State) ->
 
 	 {[{<<"register">>,Register_Name}]}->
 
-	    wrinqle_helpers: add_pid(self(),Register_Name),
+	    wrinqle_helpers:channel_event_notifier({register_pid,self(),Register_Name}),
 	    {ok,Req,Register_Name};
 
 
