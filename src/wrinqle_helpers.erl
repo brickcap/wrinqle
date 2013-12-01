@@ -6,23 +6,13 @@
 -export([subscriber_channel_name/1]).
 -export([add_subscribers/2]).
 
-add_pid(Pid,Name)->
+add_pid(Pid,Name)->	
 
-    Member = pg2:get_members(Name),
+    pg2:create(Name),		   
+    pg2:join(Name,Pid),
+    channel_event_notifier({pid_registered,Pid}),
+    lager:info("The members of channel are",[Name,pg2:get_members(Name)]).
 
-    case Member of
-
-	{error,_} ->
-
-	    pg2:create(Name),		   
-	    pg2:join(Name,Pid),
-	    channel_event_notifier({pid_registered,Pid}),
-	    lager:info("The members of channel are",[Name,pg2:get_members(Name)]);
-	
-	_->  
-	    ok
-
-	     end.
 
 remove_pid(Pid,Name)->
 

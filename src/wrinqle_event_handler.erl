@@ -29,7 +29,7 @@ handle_event({send_message,Multi_Channels,Multi_Msg},State) when is_list(Multi_C
 handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subscribers) ->
 
     Subscriber_Channel = wrinqle_helpers:subscriber_channel_name(Multi_Subscribe_To), 
-   Member = pg2:get_members(Subscriber_Channel), 
+    Member = pg2:get_members(Subscriber_Channel), 
     case Member of 
 	{error,_}->
 	    pg2:create(Subscriber_Channel),
