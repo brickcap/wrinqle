@@ -5,16 +5,6 @@
 -export([subscriber_channel_name/1]).
 -export([add_subscribers/2]).
 
-remove_pid(Pid,Name)->
-
-    Member = pg2:get_members(Name),
-
-    case Member of
-
-	{error,_} -> ok;
-	_->
-	    pg2:leave(Pid,Name)  
-    end.
 
 subscriber_channel_name(Name)->
 
