@@ -1,6 +1,6 @@
 -module(wrinqle_helpers).
 
--export([remove_pid/2]).
+
 -export([channel_event_notifier/1]).
 -export([subscriber_channel_name/1]).
 -export([add_subscribers/2]).
