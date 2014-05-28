@@ -1,0 +1,57 @@
+2014/05/28 16:33:49 [error] 6768#0: *1 "/Repo/wrinqle/example/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:33:50 [error] 6768#0: *1 open() "/Repo/wrinqle/example/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /favicon.ico HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:33:51 [error] 6768#0: *1 "/Repo/wrinqle/example/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:33:52 [error] 6768#0: *1 "/Repo/wrinqle/example/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:34:14 [error] 6768#0: *1 open() "/Repo/wrinqle/example/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:34:39 [emerg] 6792#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 16:34:39 [emerg] 6792#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 16:34:39 [emerg] 6792#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 16:34:39 [emerg] 6792#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 16:35:05 [notice] 6795#0: signal process started
+2014/05/28 16:35:11 [error] 6798#0: *1 open() "/home/akshat/Repo/wrinqle/example/~/Repo/wrinqle/example/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:35:12 [error] 6798#0: *1 open() "/home/akshat/Repo/wrinqle/example/~/Repo/wrinqle/example/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:35:12 [error] 6798#0: *1 open() "/home/akshat/Repo/wrinqle/example/~/Repo/wrinqle/example/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:35:12 [error] 6798#0: *1 open() "/home/akshat/Repo/wrinqle/example/~/Repo/wrinqle/example/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:35:13 [error] 6798#0: *1 open() "/home/akshat/Repo/wrinqle/example/~/Repo/wrinqle/example/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:37:33 [emerg] 6814#0: unexpected "}" in /home/akshat/Repo/wrinqle/example/conf/nginx.conf:11
+2014/05/28 16:37:42 [notice] 6816#0: signal process started
+2014/05/28 16:37:48 [error] 6819#0: *1 open() "/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:37:49 [error] 6819#0: *1 open() "/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:38:22 [notice] 6834#0: signal process started
+2014/05/28 16:38:26 [error] 6837#0: *1 open() "/home/akshat/Repo/wrinqle/example/~/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:38:27 [error] 6837#0: *1 open() "/home/akshat/Repo/wrinqle/example/~/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:40:27 [notice] 6862#0: signal process started
+2014/05/28 16:40:33 [error] 6865#0: *1 open() "/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:40:34 [error] 6865#0: *1 open() "/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:40:40 [error] 6865#0: *1 directory index of "/" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:40:42 [error] 6865#0: *1 directory index of "/" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:40:43 [error] 6865#0: *1 directory index of "/" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:40:44 [error] 6865#0: *1 directory index of "/" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:41:04 [error] 6865#0: *1 directory index of "/" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:41:09 [error] 6865#0: *1 open() "/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:42:01 [notice] 6891#0: signal process started
+2014/05/28 16:42:34 [error] 6895#0: *1 open() "/example/index.html" failed (2: No such file or directory), client: 127.0.0.1, server: , request: "GET /index.html HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:42:59 [error] 6895#0: *1 "/example/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:43:02 [error] 6895#0: *1 "/example/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:45:35 [notice] 6967#0: signal process started
+2014/05/28 16:45:43 [error] 6970#0: *1 "/home/akshat/Repo/wrinqle/example/~/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:48:24 [notice] 6987#0: signal process started
+2014/05/28 16:48:34 [error] 6990#0: *1 "/home/akshat/Repo/wrinqle/example/html/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:48:35 [error] 6990#0: *1 "/home/akshat/Repo/wrinqle/example/html/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:50:39 [notice] 7006#0: signal process started
+2014/05/28 16:50:45 [error] 7010#0: *1 "/home/akshat/Repo/wrinqle/example/html/./index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:8080"
+2014/05/28 16:57:42 [emerg] 7117#0: directive "root" is not terminated by ";" in /home/akshat/Repo/wrinqle/example/conf/nginx.conf:10
+2014/05/28 16:57:56 [emerg] 7118#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 16:57:56 [emerg] 7118#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 16:57:56 [emerg] 7118#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 16:57:56 [emerg] 7118#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 16:57:56 [emerg] 7118#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 16:57:56 [emerg] 7118#0: still could not bind()
+2014/05/28 16:58:01 [notice] 7119#0: signal process started
+2014/05/28 17:10:13 [emerg] 7330#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 17:10:13 [emerg] 7330#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 17:10:13 [emerg] 7330#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 17:10:13 [emerg] 7330#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 17:10:13 [emerg] 7330#0: bind() to 0.0.0.0:8080 failed (98: Address already in use)
+2014/05/28 17:10:13 [emerg] 7330#0: still could not bind()
+2014/05/28 17:10:22 [notice] 7331#0: signal process started
