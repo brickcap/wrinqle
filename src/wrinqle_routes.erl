@@ -4,7 +4,7 @@
 routes_configuration()->
     [{'_',[
 
-	   {"/websocket",wrinqle_socket_handler,[]}
+	   {"/websocket/:channel_name",wrinqle_socket_handler,[]}
 	  ]
      }
     ].

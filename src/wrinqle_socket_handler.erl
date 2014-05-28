@@ -11,6 +11,8 @@ init({tcp, http}, _Req,_Opts) ->
     {upgrade, protocol, cowboy_websocket}.
 
 websocket_init(_TransportName, Req, _Opts) ->
+    Channel_Name = cowboy_req:bindings(channel_name,Req),
+    erlang:display(Channel_Name),
     {ok, Req, undefined_state}.
 
 
