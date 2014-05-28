@@ -29,3 +29,5 @@
 127.0.0.1 - - [28/May/2014:16:50:45 +0530] "GET / HTTP/1.1" 404 577 "-" "Mozilla/5.0 (X11; Linux i686 (x86_64)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36"
 127.0.0.1 - - [28/May/2014:16:58:09 +0530] "GET / HTTP/1.1" 200 200 "-" "Mozilla/5.0 (X11; Linux i686 (x86_64)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36"
 127.0.0.1 - - [28/May/2014:17:10:28 +0530] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (X11; Linux i686 (x86_64)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36"
+127.0.0.1 - - [29/May/2014:02:22:42 +0530] "GET / HTTP/1.1" 200 200 "-" "Mozilla/5.0 (X11; Linux i686 (x86_64)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36"
+127.0.0.1 - - [29/May/2014:02:22:42 +0530] "GET /favicon.ico HTTP/1.1" 404 577 "-" "Mozilla/5.0 (X11; Linux i686 (x86_64)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36"
