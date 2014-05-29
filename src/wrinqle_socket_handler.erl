@@ -12,8 +12,7 @@ init({tcp, http}, _Req,_Opts) ->
 
 websocket_init(_TransportName, Req, _Opts) ->
     {Channel_Name,Req2} = cowboy_req:binding(channel_name,Req),
-    lager:info(Channel_Name),
-
+    wrinqle_helpers:channel_event_notifier({register_pid,self(),Channel_Name}),
     {ok, Req2, undefined_state}.
 
 
@@ -27,7 +26,6 @@ websocket_handle({text, Msg}, Req, State) ->
 
 	    wrinqle_helpers:channel_event_notifier({register_pid,self(),Register_Name}),
 	    {ok,Req,Register_Name};
-
 
 	 {[{<<"to">>,Multi_Channels},{<<"msg">>,Multi_Message}]} when is_list(Multi_Channels)->
 
@@ -80,7 +78,6 @@ websocket_info(_Info, Req, State) ->
     {ok, Req, State}.
 
 websocket_terminate(_Reason, _Req, _State) ->
-    lager:info(<<"Terminated">>),
     pg2:delete(_State),
     pg2:delete(wrinqle_helpers:subscriber_channel_name(_State)),
     ok.
