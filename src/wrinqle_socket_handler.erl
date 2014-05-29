@@ -12,7 +12,7 @@ init({tcp, http}, _Req,_Opts) ->
 
 websocket_init(_TransportName, Req, _Opts) ->
     {Channel_Name,Req2} = cowboy_req:binding(channel_name,Req),
-    wrinql_helpers:channel_event_notifier({register_pid,self(),Channel_Name})
+    wrinqle_helpers:channel_event_notifier({register_pid,self(),Channel_Name}),
     {ok, Req2, Channel_Name}.
 
 
@@ -73,7 +73,12 @@ websocket_info(_Info, Req, State) ->
     {ok, Req, State}.
 
 websocket_terminate(_Reason, _Req, _State) ->
-    pg2:delete(_State),
-    pg2:delete(wrinqle_helpers:subscriber_channel_name(_State)),
-    ok.
+lager:info(_State),
+ case _State of
+	undefined_state->ok;
+	_->
+	    pg2:delete(_State),
+	    pg2:delete(wrinq_helpers:subscriber_channel_name(_State)),
+	    ok
+    end.
 
