@@ -78,7 +78,7 @@ lager:info(_State),
 	undefined_state->ok;
 	_->
 	    pg2:delete(_State),
-	    pg2:delete(wrinq_helpers:subscriber_channel_name(_State)),
+	    pg2:delete(wrinqle_helpers:subscriber_channel_name(_State)),
 	    ok
     end.
 
