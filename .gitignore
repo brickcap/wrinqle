@@ -9,3 +9,4 @@ deps
 _rel
 ebin
 erl_crash.dump
+logs

@@ -11,9 +11,10 @@ init({tcp, http}, _Req,_Opts) ->
     {upgrade, protocol, cowboy_websocket}.
 
 websocket_init(_TransportName, Req, _Opts) ->
-    Channel_Name = cowboy_req:bindings(channel_name,Req),
-    erlang:display(Channel_Name),
-    {ok, Req, undefined_state}.
+    {Channel_Name,Req2} = cowboy_req:binding(channel_name,Req),
+    lager:info(Channel_Name),
+
+    {ok, Req2, undefined_state}.
 
 
 websocket_handle({text, Msg}, Req, State) ->
@@ -79,7 +80,7 @@ websocket_info(_Info, Req, State) ->
     {ok, Req, State}.
 
 websocket_terminate(_Reason, _Req, _State) ->
-
+    lager:info(<<"Terminated">>),
     pg2:delete(_State),
     pg2:delete(wrinqle_helpers:subscriber_channel_name(_State)),
     ok.
