@@ -12,8 +12,8 @@ init({tcp, http}, _Req,_Opts) ->
 
 websocket_init(_TransportName, Req, _Opts) ->
     {Channel_Name,Req2} = cowboy_req:binding(channel_name,Req),
-    wrinqle_helpers:channel_event_notifier({register_pid,self(),Channel_Name}),
-    {ok, Req2, undefined_state}.
+    wrinql_helpers:channel_event_notifier({register_pid,self(),Channel_Name})
+    {ok, Req2, Channel_Name}.
 
 
 websocket_handle({text, Msg}, Req, State) ->
@@ -21,11 +21,6 @@ websocket_handle({text, Msg}, Req, State) ->
    
     try  jiffy:decode(Msg) of 
 
-
-	 {[{<<"register">>,Register_Name}]}->
-
-	    wrinqle_helpers:channel_event_notifier({register_pid,self(),Register_Name}),
-	    {ok,Req,Register_Name};
 
 	 {[{<<"to">>,Multi_Channels},{<<"msg">>,Multi_Message}]} when is_list(Multi_Channels)->
 
