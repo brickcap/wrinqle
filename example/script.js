@@ -7,3 +7,7 @@ socket.onopen = function(){
 socket.onmessage = function(data){
     console.log(data);
 };
+
+window.onbeforeunload = function(){
+socket.disconnect();
+};
