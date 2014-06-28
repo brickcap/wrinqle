@@ -9,5 +9,5 @@ socket.onmessage = function(data){
 };
 
 window.onbeforeunload = function(){
-socket.disconnect();
+    socket.disconnect();
 };
