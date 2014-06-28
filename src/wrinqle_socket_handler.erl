@@ -22,9 +22,9 @@ websocket_handle({text, Msg}, Req, State) ->
     try  jiffy:decode(Msg) of 
 
 
-	 {[{<<"to">>,Multi_Channels},{<<"msg">>,Multi_Message}]} when is_list(Multi_Channels)->
+	 {[{<<"to">>,[H|T]},{<<"msg">>,Multi_Message}]}->
 
-	    True_Channels = lists:delete(State,Multi_Channels),
+	    True_Channels = lists:delete(State,[H|T]),
 	    lager:info("The true channels are",[True_Channels]),
 	    wrinqle_helpers:channel_event_notifier({send_message,True_Channels,Multi_Message}),
 
@@ -32,9 +32,9 @@ websocket_handle({text, Msg}, Req, State) ->
 
 
 
-	 {[{<<"subscribe">>,Subscribe_Channels},{<<"to">>,To}]}-> 
+	 {[{<<"subscribe">>,[H|T]},{<<"to">>,To}]}-> 
 
-	    True_Channels = lists:delete(State,Subscribe_Channels),
+	    True_Channels = lists:delete(State,[H|T]),
 	    wrinqle_helpers:channel_event_notifier({subscribe,To,True_Channels}),
 	    {ok,Req,State};
 
