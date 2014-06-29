@@ -11,3 +11,4 @@ ebin
 erl_crash.dump
 logs
 test_file.erl
+logs
