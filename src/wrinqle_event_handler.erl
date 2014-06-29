@@ -6,7 +6,7 @@
 
 -behaviour(gen_event).
 
--include("wrinqle.hrl")
+-include("wrinqle.hrl").
 
 init(_Args)->
     {ok,[]}.
