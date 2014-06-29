@@ -6,6 +6,8 @@
 
 -behaviour(gen_event).
 
+-include("wrinqle.hrl")
+
 init(_Args)->
     {ok,[]}.
 
@@ -38,7 +40,7 @@ handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subs
 	    wrinqle_helpers:add_subscribers(Subscriber_Channel,Subscribers) 
     end,
     [G|_]= pg2:get_members(Multi_Subscribe_To),
-    G!{send,{[{<<"subcribed">>,<<"ok">>}]}},
+    G ! subscribed,
     {ok,State};
 
 
