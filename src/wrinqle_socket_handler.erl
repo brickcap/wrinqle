@@ -66,7 +66,7 @@ websocket_info(subscribed,Req,State)->
 
     {reply,{text,?status_ok},Req,State};
 
-websocket_info(pid_registered,Req,State)->
+websocket_info({pid_registered,_Name},Req,State)->
     
     {reply,{text,?status_ok},Req,State};
 

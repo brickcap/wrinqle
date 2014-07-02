@@ -66,7 +66,7 @@ handle_event({register_pid,Pid,Name},State) ->
     pg2:create(Name),		   
     pg2:join(Name,Pid),
     lager:info("The members of channel are",[Name,pg2:get_members(Name)]),
-    Pid! pid_registered,
+    Pid! {pid_registered,Name},
     {ok,State}.
 
 handle_call(_, State) ->
@@ -86,8 +86,8 @@ terminate(_Reason, _State) ->
 register_pid_test()->
     handle_event({register_pid,self(),test_pid},some_state),
     receive
-	pid_registered->
-	    ok
+	{pid_registered,Name}->
+	    ?assertEqual(test_pid,Name)
     end.
 
 -endif.
