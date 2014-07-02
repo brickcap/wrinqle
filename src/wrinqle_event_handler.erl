@@ -80,3 +80,14 @@ code_change(_OldVsn, State, _Extra) ->
 
 terminate(_Reason, _State) ->
     ok.
+
+-ifdef(TEST).
+
+register_pid_test()->
+    handle_event({register_pid,self(),test_pid},some_state),
+    receive
+	pid_registered->
+	    ok
+    end.
+
+-endif.
