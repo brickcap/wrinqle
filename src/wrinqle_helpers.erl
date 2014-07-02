@@ -5,6 +5,9 @@
 -export([subscriber_channel_name/1]).
 -export([add_subscribers/2]).
 
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
 
 subscriber_channel_name(Name)->
 
@@ -25,3 +28,11 @@ add_subscribers(Subscriber_Channel,Subscribers)->
 		  {error,_} -> lager:info("Unavailable")
 	      end
       end,Subscribers).
+
+
+-ifdef(TEST).
+
+subscriber_name_test()->
+    ?assertEqual(<<"test_subscribers">>,subscriber_channel_name(<<"test">>)).
+
+-endif.
