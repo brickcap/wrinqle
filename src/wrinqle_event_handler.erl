@@ -92,7 +92,6 @@ register_pid_test()->
     end.
 
 send_message_test()->
-    pg2:delete(test_pid),
     List =  [<<"one">>,<<"two">>,<<"three">>],
     Msg = <<"Hello there">>,
     lists:foreach(
