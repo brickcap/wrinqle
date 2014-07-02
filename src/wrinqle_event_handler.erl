@@ -81,6 +81,7 @@ code_change(_OldVsn, State, _Extra) ->
 terminate(_Reason, _State) ->
     ok.
 
+
 -ifdef(TEST).
 
 register_pid_test()->
@@ -89,5 +90,21 @@ register_pid_test()->
 	{pid_registered,Name}->
 	    ?assertEqual(test_pid,Name)
     end.
+
+send_message_test()->
+    pg2:delete(test_pid),
+    List =  [<<"one">>,<<"two">>,<<"three">>],
+    Msg = <<"Hello there">>,
+    lists:foreach(
+      fun(N)->
+	      pg2:create(N),
+	      pg2:join(N,self())
+      end,List),
+     handle_event({send_message,List,Msg},some_state),
+    receive
+	{send,S_Msg}->
+	    ?assertEqual(Msg,S_Msg)
+    end.
+
 
 -endif.
