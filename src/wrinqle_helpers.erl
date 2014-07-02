@@ -6,7 +6,9 @@
 -export([add_subscribers/2]).
 
 -ifdef(TEST).
+
 -include_lib("eunit/include/eunit.hrl").
+
 -endif.
 
 subscriber_channel_name(Name)->

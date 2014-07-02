@@ -8,6 +8,11 @@
 
 -include("wrinqle.hrl").
 
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
+
+
 init(_Args)->
     {ok,[]}.
 
