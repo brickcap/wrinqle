@@ -93,14 +93,24 @@ lager:info(_State),
 -include_lib("eunit/include/eunit.hrl").
 
 handle_msg_test_()->
-{setup,fun start/0,fun stop/1,fun hey/0}.
+{setup,fun start/0,fun stop/1,fun test_text_msg/0}.
     
 start()->
     {ok,Pid}= gen_event:start({global,wrinqle_channel_events}),
     gen_event:add_handler({global,wrinqle_channel_events},wrinqle_event_handler,[]),
     Pid.
-hey()->
-    ?assertEqual(ok,ok).
+
+test_text_msg()->
+    Result1 =   websocket_handle({text,<<"{\"to\":[\"hello\"],\"msg\":\"Hey Joe\"}">>},req,state),
+    Result2  =   websocket_handle({text,<<"{\"subscribe\":[\"hello\"],\"to\":\"me\"}">>},req,state),
+    Result3 = websocket_handle({text,<<"{\"publish\":\"hello\",\"to\":\"me\"}">>},req,state),
+    Result4 = websocket_handle({text,<<"{\"dancingqueen\":\"true\"}">>},req,state),
+    ?assertEqual(Result1,{ok,req,state}),
+    ?assertEqual(Result2,{ok,req,state}),
+    ?assertEqual(Result3,{ok,req,state}),
+    ?assertEqual(Result4,{reply, {text,?error_packet}, req, state}).
+    
+        
 stop(Pid)->
     ok.
 -endif.
