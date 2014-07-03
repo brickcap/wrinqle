@@ -112,5 +112,17 @@ send_message_test()->
 	    ?assertEqual(Result,{ok,some_state})
     end.
 
+publish_message_test()->
+    pg2:create(<<"hello">>),
+    pg2:create(<<"hello_subscribers">>),
+    pg2:join(<<"hello">>,self()),
+    pg2:join(<<"hello_subscribers">>,self()),
+    Result = handle_event({publish,<<"message">>,<<"hello">>},some_state),
+    receive
+	{send,_Msg}->
+	    ?assertEqual(Result,{ok,some_state}),
+	    pg2:delete(<<"hello">>),    
+	    pg2:delete(<<"hello_subscribers">>)
+    end.
 
 -endif.
