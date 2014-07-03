@@ -98,6 +98,14 @@ handle_msg_test_()->
 start()->
     {ok,Pid}= gen_event:start({global,wrinqle_channel_events}),
     gen_event:add_handler({global,wrinqle_channel_events},wrinqle_event_handler,[]),
+    wrinqle_helpers:channel_event_notifier({register_pid,self(),<<"me">>}),
+    wrinqle_helpers:channel_event_notifier({register_pid,self(),<<"hello">>}),
+        List =  [<<"one">>,<<"two">>,<<"three">>],
+     lists:foreach(
+      fun(N)->	      
+	      pg2:delete(N)
+      end,List),
+
     Pid.
 
 test_text_msg()->
@@ -112,5 +120,7 @@ test_text_msg()->
     
         
 stop(Pid)->
+    pg2:delete(<<"me">>),
+    pg2:delete(<<"hello">>),
     ok.
 -endif.

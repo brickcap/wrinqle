@@ -84,11 +84,14 @@ terminate(_Reason, _State) ->
 
 -ifdef(TEST).
 
+
+    
 register_pid_test()->
-    handle_event({register_pid,self(),test_pid},some_state),
+    Result = handle_event({register_pid,self(),test_pid},some_state),
     receive
 	{pid_registered,Name}->
-	    ?assertEqual(test_pid,Name)
+	    ?assertEqual(Result,{ok,some_state}),
+	    pg2:delete(test_pid)    
     end.
 
 send_message_test()->
@@ -99,10 +102,10 @@ send_message_test()->
 	      pg2:create(N),
 	      pg2:join(N,self())
       end,List),
-     handle_event({send_message,List,Msg},some_state),
+    Result = handle_event({send_message,List,Msg},some_state),
     receive
 	{send,S_Msg}->
-	    ?assertEqual(Msg,S_Msg)
+	    ?assertEqual(Result,{ok,some_state})
     end.
 
 
