@@ -9,6 +9,11 @@
 
 -include("wrinqle.hrl").
 
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
+
+
 init({tcp, http}, _Req,_Opts) ->
     {upgrade, protocol, cowboy_websocket}.
 
@@ -84,3 +89,6 @@ lager:info(_State),
 	    ok
     end.
 
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
