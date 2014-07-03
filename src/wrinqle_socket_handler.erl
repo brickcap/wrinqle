@@ -100,12 +100,6 @@ start()->
     gen_event:add_handler({global,wrinqle_channel_events},wrinqle_event_handler,[]),
     wrinqle_helpers:channel_event_notifier({register_pid,self(),<<"me">>}),
     wrinqle_helpers:channel_event_notifier({register_pid,self(),<<"hello">>}),
-        List =  [<<"one">>,<<"two">>,<<"three">>],
-     lists:foreach(
-      fun(N)->	      
-	      pg2:delete(N)
-      end,List),
-
     Pid.
 
 test_text_msg()->
@@ -117,10 +111,19 @@ test_text_msg()->
     ?assertEqual(Result2,{ok,req,state}),
     ?assertEqual(Result3,{ok,req,state}),
     ?assertEqual(Result4,{reply, {text,?error_packet}, req, state}).
-    
-        
+
+subscribed_test()->        
+    Result = websocket_info(subscribed,req,state),
+    ?assertEqual(Result,{reply,{text,?status_ok},req,state}).
+
+registered_test()->    
+    Result = websocket_info(subscribed,req,state),
+    ?assertEqual(Result,{reply,{text,?status_ok},req,state}).
+
+send_test()->    
+    Result = websocket_info({send,<<"Message">>},req,state),
+    ?assertEqual(Result, {reply,{text,?send_msg(<<"Message">>)},req,state}).  
+
 stop(Pid)->
-    pg2:delete(<<"me">>),
-    pg2:delete(<<"hello">>),
     ok.
 -endif.
