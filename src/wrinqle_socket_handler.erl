@@ -122,6 +122,7 @@ send_test()->
     Result = websocket_info({send,<<"Message">>},req,state),
     ?assertEqual(Result, {reply,{text,?send_msg(<<"Message">>)},req,state}).  
 
-stop(Pid)->
+stop(_Pid)->
     ok.
+
 -endif.
