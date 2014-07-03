@@ -98,19 +98,17 @@ handle_msg_test_()->
 start()->
     {ok,Pid}= gen_event:start({global,wrinqle_channel_events}),
     gen_event:add_handler({global,wrinqle_channel_events},wrinqle_event_handler,[]),
-    wrinqle_helpers:channel_event_notifier({register_pid,self(),<<"me">>}),
-    wrinqle_helpers:channel_event_notifier({register_pid,self(),<<"hello">>}),
     Pid.
 
 test_text_msg()->
-    Result1 =   websocket_handle({text,<<"{\"to\":[\"hello\"],\"msg\":\"Hey Joe\"}">>},req,state),
-    Result2  =   websocket_handle({text,<<"{\"subscribe\":[\"hello\"],\"to\":\"me\"}">>},req,state),
-    Result3 = websocket_handle({text,<<"{\"publish\":\"hello\",\"to\":\"me\"}">>},req,state),
-    Result4 = websocket_handle({text,<<"{\"dancingqueen\":\"true\"}">>},req,state),
-    ?assertEqual(Result1,{ok,req,state}),
-    ?assertEqual(Result2,{ok,req,state}),
-    ?assertEqual(Result3,{ok,req,state}),
-    ?assertEqual(Result4,{reply, {text,?error_packet}, req, state}).
+    Result1 = websocket_handle({text,<<"{\"to\":[\"hello\"],\"msg\":\"Hey Joe\"}">>},req,to_state),
+    Result2 = websocket_handle({text,<<"{\"subscribe\":[\"hello\"],\"to\":\"me\"}">>},req,sub_state),
+    Result3 = websocket_handle({text,<<"{\"publish\":\"hello\",\"to\":\"me\"}">>},req,pub_state),
+    Result4 = websocket_handle({text,<<"{\"dancingqueen\":\"true\"}">>},req,err_state),
+    ?assertEqual(Result1,{ok,req,to_state}),
+    ?assertEqual(Result2,{ok,req,sub_state}),
+    ?assertEqual(Result3,{ok,req,pub_state}),
+    ?assertEqual(Result4,{reply, {text,?error_packet}, req, err_state}).
 
 subscribed_test()->        
     Result = websocket_info(subscribed,req,state),

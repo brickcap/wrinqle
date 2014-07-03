@@ -35,17 +35,21 @@ handle_event({send_message,Multi_Channels,Multi_Msg},State) when is_list(Multi_C
 
 handle_event({subscribe,Multi_Subscribe_To,Subscribers},State) when is_list(Subscribers) ->
 
-    Subscriber_Channel = wrinqle_helpers:subscriber_channel_name(Multi_Subscribe_To), 
-    Member = pg2:get_members(Subscriber_Channel), 
-    case Member of 
+    case pg2:get_members(Multi_Subscribe_To) of
+	[G|_]->
+	    Subscriber_Channel = wrinqle_helpers:subscriber_channel_name(Multi_Subscribe_To), 
+	    Member = pg2:get_members(Subscriber_Channel), 
+	    case Member of 
+		{error,_}->
+		    pg2:create(Subscriber_Channel),
+		    wrinqle_helpers:add_subscribers(Subscriber_Channel,Subscribers);
+		_->
+		    wrinqle_helpers:add_subscribers(Subscriber_Channel,Subscribers) 
+	    end,
+	    G ! subscribed;
 	{error,_}->
-	    pg2:create(Subscriber_Channel),
-	    wrinqle_helpers:add_subscribers(Subscriber_Channel,Subscribers);
-	_->
-	    wrinqle_helpers:add_subscribers(Subscriber_Channel,Subscribers) 
+	    ok
     end,
-    [G|_]= pg2:get_members(Multi_Subscribe_To),
-    G ! subscribed,
     {ok,State};
 
 
@@ -89,7 +93,7 @@ terminate(_Reason, _State) ->
 register_pid_test()->
     Result = handle_event({register_pid,self(),test_pid},some_state),
     receive
-	{pid_registered,Name}->
+	{pid_registered,_Name}->
 	    ?assertEqual(Result,{ok,some_state}),
 	    pg2:delete(test_pid)    
     end.
@@ -104,7 +108,7 @@ send_message_test()->
       end,List),
     Result = handle_event({send_message,List,Msg},some_state),
     receive
-	{send,S_Msg}->
+	{send,_S_Msg}->
 	    ?assertEqual(Result,{ok,some_state})
     end.
 
