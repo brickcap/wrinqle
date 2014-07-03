@@ -91,4 +91,16 @@ lager:info(_State),
 
 -ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
+
+handle_msg_test_()->
+{setup,fun start/0,fun stop/1,fun hey/0}.
+    
+start()->
+    {ok,Pid}= gen_event:start({global,wrinqle_channel_events}),
+    gen_event:add_handler({global,wrinqle_channel_events},wrinqle_event_handler,[]),
+    Pid.
+hey()->
+    ?assertEqual(ok,ok).
+stop(Pid)->
+    ok.
 -endif.
