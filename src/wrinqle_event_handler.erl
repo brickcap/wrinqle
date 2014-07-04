@@ -125,4 +125,23 @@ publish_message_test()->
 	    pg2:delete(<<"hello_subscribers">>)
     end.
 
+subscribe_test()->
+    pg2:create(<<"hello">>),
+    pg2:create(<<"some">>),
+    pg2:create(<<"one">>),
+    
+    pg2:join(<<"hello">>,self()),
+    pg2:join(<<"some">>,self()),
+    pg2:join(<<"one">>,self()),
+   
+    Result = handle_event({subscribe,<<"hello">>,[<<"some">>,<<"one">>]},some_state),
+    receive
+	subscribed->
+	    ?assertEqual(Result,{ok,some_state}),
+	    pg2:delete(<<"hello">>),
+	    pg2:delete(<<"some">>),
+	    pg2:delete(<<"one">>)
+	    
+   end.
+
 -endif.
