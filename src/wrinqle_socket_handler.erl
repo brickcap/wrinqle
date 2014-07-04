@@ -129,8 +129,12 @@ send_test()->
 termintate_undefined_test()->
     Result =   websocket_terminate(no, means, undefined_state),
     ?assertEqual(Result,ok).
+terminate_defined_test()->
+    Result =   websocket_terminate(no, means, <<"defined">>),
+    ?assertEqual(Result,ok).
+
 unmatched_handle_test()->
-    Result = websocket_handle(test, req, state),
+    Result = websocket_handle(test, req,state),
     ?assertEqual(Result,{ok,req,state}).
    
 
