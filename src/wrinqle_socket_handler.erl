@@ -105,10 +105,12 @@ test_text_msg()->
     Result2 = websocket_handle({text,<<"{\"subscribe\":[\"hello\"],\"to\":\"me\"}">>},req,sub_state),
     Result3 = websocket_handle({text,<<"{\"publish\":\"hello\",\"to\":\"me\"}">>},req,pub_state),
     Result4 = websocket_handle({text,<<"{\"dancingqueen\":\"true\"}">>},req,err_state),
+    Result5 = websocket_handle({text,<<"{\"dancingqueen\":\"true\",}">>},req,err_state),
     ?assertEqual(Result1,{ok,req,to_state}),
     ?assertEqual(Result2,{ok,req,sub_state}),
     ?assertEqual(Result3,{ok,req,pub_state}),
-    ?assertEqual(Result4,{reply, {text,?error_packet}, req, err_state}).
+    ?assertEqual(Result4,{reply, {text,?error_packet}, req, err_state}),
+    ?assertEqual(Result5, {reply, {text, ?error_json}, req, err_state}).
 
 subscribed_test()->        
     Result = websocket_info(subscribed,req,state),
@@ -121,6 +123,11 @@ registered_test()->
 send_test()->    
     Result = websocket_info({send,<<"Message">>},req,state),
     ?assertEqual(Result, {reply,{text,?send_msg(<<"Message">>)},req,state}).  
+
+unmatched_handle_test()->
+    Result = websocket_handle(test, req, state),
+    ?assertEqual(Result,{ok,req,state}).
+   
 
 stop(_Pid)->
     ok.
