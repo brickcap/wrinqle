@@ -117,13 +117,18 @@ subscribed_test()->
     ?assertEqual(Result,{reply,{text,?status_ok},req,state}).
 
 registered_test()->    
-    Result = websocket_info(subscribed,req,state),
+    Result = websocket_info({pid_registered,<<"some_name">>},req,state),
     ?assertEqual(Result,{reply,{text,?status_ok},req,state}).
+info_match_nothing_test()->
+    Result = websocket_info(abba,req,state),
+    ?assertEqual(Result,{ok,req,state}).
 
 send_test()->    
     Result = websocket_info({send,<<"Message">>},req,state),
     ?assertEqual(Result, {reply,{text,?send_msg(<<"Message">>)},req,state}).  
-
+termintate_undefined_test()->
+    Result =   websocket_terminate(no, means, undefined_state),
+    ?assertEqual(Result,ok).
 unmatched_handle_test()->
     Result = websocket_handle(test, req, state),
     ?assertEqual(Result,{ok,req,state}).
